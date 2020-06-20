@@ -6,12 +6,24 @@ from django.views.generic.base import RedirectView
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
 from .users.views import UserViewSet, UserCreateViewSet
-from .menuratings.views import RestaurantViewSet
+from .menuratings.views import (
+    RestaurantViewSet,
+    RestaurantRepresenterViewSet,
+    MenuViewSet,
+    OrganizationViewSet,
+    OrganizationRepresenterViewSet,
+    VoteViewSet
+)
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'users', UserCreateViewSet)
 router.register(r'restaurants', RestaurantViewSet)
+router.register(r'restaurant-representers', RestaurantRepresenterViewSet)
+router.register(r'menus', MenuViewSet)
+router.register(r'orgs', OrganizationViewSet)
+router.register(r'org-representers', OrganizationRepresenterViewSet)
+router.register(r'votes', VoteViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

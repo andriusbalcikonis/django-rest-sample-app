@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class MenuratingzConfig(AppConfig):
-    name = 'menuratingz'
+class MenuratingsConfig(AppConfig):
+    name = 'menuratings'
