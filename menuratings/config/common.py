@@ -24,6 +24,7 @@ class Common(Configuration):
 
         # Your apps
         'menuratings.users',
+        'menuratings.menuratings',
 
     )
 
