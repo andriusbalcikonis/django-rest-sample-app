@@ -19,6 +19,11 @@ TODO
 - Docker
 - Docker compose
 
+**First time only setup - to create new admin user**
+
+1. `docker-compose run --rm web ./manage.py createsuperuser`
+2. Follow instructions to enter user data
+
 **To start app locally:**
 
 1. `docker-compose up`
