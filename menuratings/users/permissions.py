@@ -30,4 +30,3 @@ class CanWorkWithUserData(permissions.BasePermission):
                 return (
                     [] if other_user_data else ["list", "retrieve", "update", "destroy"]
                 )
-
