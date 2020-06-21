@@ -14,24 +14,26 @@ TODO
 
 ## Local Development
 
-**Prerequisites**
+**Prerequisites:**
 
 - Docker
 - Docker compose
+- Python3 (tested with 3.8.2, possibly works with older versions as well)
+- Virtualenv
+- Make
 
-**First time only setup - to create new admin user**
+**To start application locally:**
 
-1. `docker-compose run --rm web ./manage.py createsuperuser`
-2. Follow instructions to enter user data
+1. `make run`
+2. Open http://localhost:8000
 
-**To start app locally:**
+Clarification: dependencies (virtualenv, pip install, dbs, migrations) will be installed and launched automatically.
 
-1. `docker-compose up`
-2. To see web app, open http://localhost:8000
-3. (Optionally) to see the docs, open http://localhost:8001
-4. (Optionally) to access db admin, open http://localhost:8002, login with `admin:password` and connect to Main db (password: `postgres`)
+**To create superadmin user:**
 
-**To run any command:**
+1. `make createsuperuser`
 
-1. `docker-compose run --rm web ./manage.py [command]`
-2. If command created some files in working dir, run `sudo chown -R $USER:$USER .`
+**To check DB contents via pgadmin**
+
+1. `make`
+2. Open http://localhost:8001

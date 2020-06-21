@@ -1,4 +1,5 @@
 import os
+import dj_database_url
 from .common import Common
 
 
@@ -29,4 +30,12 @@ class Production(Common):
     # 86400 = (60 seconds x 60 minutes x 24 hours)
     AWS_HEADERS = {
         'Cache-Control': 'max-age=86400, s-maxage=86400, must-revalidate',
+    }
+
+    # Postgres
+    DATABASES = {
+        'default': dj_database_url.config(
+            default='postgres://postgres:@postgres:5432/postgres',
+            conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
+        )
     }
