@@ -27,7 +27,7 @@ TODO
 1. `make run`
 2. Open http://localhost:8000
 
-Clarification: any `make` will ensure a few things automatically:
+Clarification: `make run` (or any `make` command) will ensure a few things automatically:
 
 1. Install dependencies (virtualenv, pip install)
 2. Perform checks (formatting, linting, testing)
@@ -42,6 +42,7 @@ Clarification: any `make` will ensure a few things automatically:
 
 1. `make`
 2. Open http://localhost:8001
+3. Login with `admin:password` and connect to Main db (password: `postgres`)
 
 **To start debugging:**
 
