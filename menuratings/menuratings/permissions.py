@@ -7,4 +7,4 @@ class IsSuperAdmin(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return False
+        return False  # Tmp
