@@ -2,10 +2,11 @@ from rest_framework import serializers
 from .models import User
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = (
+            # "url",
             "id",
             "username",
             "first_name",
@@ -14,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ("username",)
 
 
-class CreateUserSerializer(serializers.ModelSerializer):
+class CreateUserSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
         # call create_user on user object. Without this
         # the password will be stored in plain text.

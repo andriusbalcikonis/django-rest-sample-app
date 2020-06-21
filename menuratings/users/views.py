@@ -1,27 +1,30 @@
-from rest_framework import viewsets, mixins
-from rest_framework.permissions import AllowAny
+from rest_framework import viewsets
 from .models import User
-from .permissions import IsUserOrReadOnly
-from .serializers import CreateUserSerializer, UserSerializer
+from .permissions import CanWorkWithUserData
+from .serializers import UserSerializer, CreateUserSerializer
 
 
-class UserViewSet(
-    mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
-):
+class UserViewSet(viewsets.ModelViewSet):
     """
-    Updates and retrieves user accounts
-    """
-
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = (IsUserOrReadOnly,)
-
-
-class UserCreateViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
-    """
-    Creates user accounts
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
     """
 
-    queryset = User.objects.all()
-    serializer_class = CreateUserSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (CanWorkWithUserData,)
+
+    def get_queryset(self):
+        """
+        Filter objects so a user only sees his own stuff.
+        If user is admin, let him see all.
+        """
+        if self.request.user.is_superuser:
+            return User.objects.all()
+        else:
+            return User.objects.filter(id=self.request.user.id)
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return UserSerializer
+        if self.action == "create":
+            return CreateUserSerializer
+        return UserSerializer

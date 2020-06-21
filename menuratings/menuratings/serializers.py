@@ -12,34 +12,34 @@ from menuratings.menuratings.models import (
 class RestaurantSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Restaurant
-        fields = ["id", "name"]
+        fields = ["url", "id", "name"]
 
 
 class RestaurantRepresenterSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = RestaurantRepresenter
-        fields = ["id", "user", "restaurant"]
+        fields = ["url", "id", "user", "restaurant"]
 
 
 class MenuSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Menu
-        fields = ["id", "date", "contents"]
+        fields = ["url", "id", "date", "contents"]
 
 
 class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Organization
-        fields = ["id", "name"]
+        fields = ["url", "id", "name"]
 
 
 class OrganizationRepresenterSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = OrganizationRepresenter
-        fields = ["id", "user", "organization", "is_org_admin"]
+        fields = ["url", "id", "user", "organization", "is_org_admin"]
 
 
 class VoteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Vote
-        fields = ["id", "voter", "menu"]
+        fields = ["url", "id", "voter", "menu"]
