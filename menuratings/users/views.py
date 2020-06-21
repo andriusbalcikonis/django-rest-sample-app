@@ -17,7 +17,9 @@ class UserViewSet(viewsets.ModelViewSet):
         Filter objects so a user only sees his own stuff.
         If user is admin, let him see all.
         """
-        if self.request.user.is_superuser:
+        if self.request.user.is_anonymous:
+            return User.objects.none()
+        elif self.request.user.is_superuser:
             return User.objects.all()
         else:
             return User.objects.filter(id=self.request.user.id)
