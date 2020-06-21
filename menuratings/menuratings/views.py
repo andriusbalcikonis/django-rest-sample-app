@@ -14,6 +14,9 @@ from menuratings.menuratings.serializers import (
     OrganizationRepresenterSerializer,
     VoteSerializer
 )
+from menuratings.menuratings.permissions import (
+    IsSuperAdmin
+)
 from rest_framework import viewsets
 
 
@@ -24,8 +27,7 @@ class RestaurantViewSet(viewsets.ModelViewSet):
     """
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly,
-    #                       IsOwnerOrReadOnly]
+    permission_classes = [IsSuperAdmin]
 
     # def perform_create(self, serializer):
     #     serializer.save(owner=self.request.user)
