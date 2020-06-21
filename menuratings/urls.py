@@ -16,7 +16,7 @@ from .menuratings.views import (
 )
 
 router = DefaultRouter()
-router.register(r"users", UserViewSet, basename="Users")
+router.register(r"users", UserViewSet, basename="user")
 router.register(r"restaurants", RestaurantViewSet)
 router.register(r"restaurant-representers", RestaurantRepresenterViewSet)
 router.register(r"menus", MenuViewSet)

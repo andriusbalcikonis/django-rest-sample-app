@@ -5,6 +5,9 @@ from menuratings.users.models import User
 class Restaurant(models.Model):
     name = models.TextField()
 
+    def __str__(self):
+        return self.name
+
 
 class RestaurantRepresenter(models.Model):
     user = models.ForeignKey(
@@ -22,6 +25,9 @@ class Menu(models.Model):
 
 class Organization(models.Model):
     name = models.TextField()
+
+    def __str__(self):
+        return self.name
 
 
 class OrganizationRepresenter(models.Model):
