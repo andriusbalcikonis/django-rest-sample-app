@@ -27,7 +27,12 @@ TODO
 1. `make run`
 2. Open http://localhost:8000
 
-Clarification: dependencies (virtualenv, pip install, dbs, migrations) will be installed and launched automatically.
+Clarification: any `make` will ensure a few things automatically:
+
+1. Install dependencies (virtualenv, pip install)
+2. Perform checks (formatting, linting, testing)
+3. Startup local DBs
+4. Apply migrations
 
 **To create superadmin user:**
 
@@ -37,3 +42,11 @@ Clarification: dependencies (virtualenv, pip install, dbs, migrations) will be i
 
 1. `make`
 2. Open http://localhost:8001
+
+**To start debugging:**
+
+Configure and start debugging for your IDE. Details:
+
+- Command before startup: `make`
+- Startup command: `env/bin/python manage.py runserver`
+- Example configuration for Visual Studio Code is here: `.vscode/launch.json`

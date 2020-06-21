@@ -4,14 +4,15 @@ PYBIN = $(ENV)/bin
 PIP = $(PYBIN)/pip
 
 
-.PHONY: default
-default: ensure-local-db
+.PHONY: default-setup
+default-setup: check ensure-local-db
 
 .PHONY: help
 help:
-	@echo "make                     # Ensure ready (virtualenv, pip install, run dbs, migrations)"
-	@echo "make run                 # (Ensure ready and) Launch local app"
-	@echo "make createsuperuser     # (Ensure ready and) Create admin user"
+	@echo "make                       # Ensure ready (virtualenv, pip install, run dbs, migrations)"
+	@echo "make run                   # (Ensure ready and) Launch local app"
+	@echo "make check                 # (Ensure ready and) Linting & testing"
+	@echo "make createsuperuser       # (Ensure ready and) Create admin user"
 
 $(ENV)/.virtual-env-created:
 	virtualenv -p $(PYTHON) $(ENV)
@@ -20,6 +21,15 @@ $(ENV)/.virtual-env-created:
 $(ENV)/.pip-install-done: $(ENV)/.virtual-env-created requirements.txt
 	$(PIP) install -r requirements.txt
 	touch $(ENV)/.pip-install-done
+
+.PHONY: check
+check: $(ENV)/.pip-install-done
+
+	# Black code formatter first:
+	$(PYBIN)/black menuratings
+
+	# Flake8 linter after that:
+	$(PYBIN)/flake8 menuratings
 
 .PHONY: ensure-local-db
 ensure-local-db: $(ENV)/.pip-install-done
@@ -34,9 +44,9 @@ ensure-local-db: $(ENV)/.pip-install-done
 	$(PYBIN)/python3 manage.py migrate
 
 .PHONY: run
-run: ensure-local-db
+run: default-setup
 	$(PYBIN)/python3 manage.py runserver
 
 .PHONY: createsuperuser
-createsuperuser: ensure-local-db
+createsuperuser: default-setup
 	$(PYBIN)/python3 manage.py createsuperuser
