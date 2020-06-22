@@ -1,7 +1,16 @@
-# content of test_sample.py
-def inc(x):
-    return x + 1
+import pytest
+from menuratings.menuratings.models import Restaurant
 
 
-def test_answer():
-    assert inc(3) == 4
+@pytest.mark.django_db
+def test_smth():
+
+    r = Restaurant(name="From tests")
+    r.save()
+
+    r = Restaurant(name="From tests 2")
+    r.save()
+
+    all = Restaurant.objects.all()
+
+    assert len(all) == 2
