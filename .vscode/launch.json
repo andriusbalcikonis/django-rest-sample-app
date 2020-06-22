@@ -22,6 +22,16 @@
       "django": true,
       "preLaunchTask": "make",
       "justMyCode": false
+    },
+    {
+      "name": "Python: Django pytest",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/env/bin/pytest",
+      "args": [],
+      "django": true,
+      "preLaunchTask": "make",
+      "justMyCode": false
     }
   ]
 }
