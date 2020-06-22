@@ -9,10 +9,9 @@ default-setup: check ensure-local-db
 
 .PHONY: help
 help:
-	@echo "make                       # Ensure ready (virtualenv, pip install, run dbs, migrations)"
-	@echo "make run                   # (Ensure ready and) Launch local app"
-	@echo "make check                 # (Ensure ready and) Linting & testing"
-	@echo "make createsuperuser       # (Ensure ready and) Create admin user"
+	@echo "make                       # Prepare (virtualenv, pip install, run dbs, migrations, format, lint and run tests)"
+	@echo "make run                   # (Prepare and) Launch local app"
+	@echo "make createsuperuser       # (Prepare and) Create admin user"
 
 $(ENV)/.virtual-env-created:
 	virtualenv -p $(PYTHON) $(ENV)
@@ -30,6 +29,9 @@ check: $(ENV)/.pip-install-done
 
 	# Flake8 linter after that:
 	$(PYBIN)/flake8 menuratings
+	
+	# Tests:
+	$(PYBIN)/pytest
 
 .PHONY: ensure-local-db
 ensure-local-db: $(ENV)/.pip-install-done
