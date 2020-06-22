@@ -19,8 +19,7 @@ class Common(Configuration):
         "rest_framework",  # utilities for rest apis
         "rest_framework.authtoken",  # token authentication
         # Your apps
-        "menuratings.users",
-        "menuratings.menuratings",
+        "menuratings.mr",
     )
 
     # https://docs.djangoproject.com/en/2.0/topics/http/middleware/
@@ -95,9 +94,9 @@ class Common(Configuration):
         {
             "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
         },
-        {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
-        {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
-        {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
+        {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+        {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+        {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
     ]
 
     # Logging
@@ -114,9 +113,7 @@ class Common(Configuration):
             },
             "simple": {"format": "%(levelname)s %(message)s"},
         },
-        "filters": {
-            "require_debug_true": {"()": "django.utils.log.RequireDebugTrue",},
-        },
+        "filters": {"require_debug_true": {"()": "django.utils.log.RequireDebugTrue"}},
         "handlers": {
             "django.server": {
                 "level": "INFO",
@@ -134,7 +131,7 @@ class Common(Configuration):
             },
         },
         "loggers": {
-            "django": {"handlers": ["console"], "propagate": True,},
+            "django": {"handlers": ["console"], "propagate": True},
             "django.server": {
                 "handlers": ["django.server"],
                 "level": "INFO",
@@ -150,7 +147,7 @@ class Common(Configuration):
     }
 
     # Custom user app
-    AUTH_USER_MODEL = "users.User"
+    AUTH_USER_MODEL = "mr.User"
 
     # Django Rest Framework
     REST_FRAMEWORK = {
@@ -161,7 +158,7 @@ class Common(Configuration):
             "rest_framework.renderers.JSONRenderer",
             "rest_framework.renderers.BrowsableAPIRenderer",
         ),
-        "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny",],
+        "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
         "DEFAULT_AUTHENTICATION_CLASSES": (
             "rest_framework.authentication.SessionAuthentication",
             "rest_framework.authentication.TokenAuthentication",

@@ -1,5 +1,5 @@
 import pytest
-from menuratings.menuratings.models import Restaurant
+from menuratings.mr.models import Restaurant
 
 from django.urls import reverse
 from rest_framework import status

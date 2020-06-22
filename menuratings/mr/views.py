@@ -1,21 +1,52 @@
-from menuratings.menuratings.models import (
+from rest_framework import viewsets
+from .permissions import CanWorkWithUserData, IsSuperAdmin
+from menuratings.mr.models import (
     Restaurant,
     RestaurantRepresenter,
     Menu,
     Organization,
     OrganizationRepresenter,
     Vote,
+    User,
 )
-from menuratings.menuratings.serializers import (
+from menuratings.mr.serializers import (
     RestaurantSerializer,
     RestaurantRepresenterSerializer,
     MenuSerializer,
     OrganizationSerializer,
     OrganizationRepresenterSerializer,
     VoteSerializer,
+    UserSerializer,
+    CreateUserSerializer,
 )
-from menuratings.menuratings.permissions import IsSuperAdmin
-from rest_framework import viewsets
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
+    """
+
+    permission_classes = (CanWorkWithUserData,)
+
+    def get_queryset(self):
+        """
+        Filter objects so a user only sees his own stuff.
+        If user is admin, let him see all.
+        """
+        if self.request.user.is_anonymous:
+            return User.objects.none()
+        elif self.request.user.is_superuser:
+            return User.objects.all()
+        else:
+            return User.objects.filter(id=self.request.user.id)
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return UserSerializer
+        if self.action == "create":
+            return CreateUserSerializer
+        return UserSerializer
 
 
 class RestaurantViewSet(viewsets.ModelViewSet):

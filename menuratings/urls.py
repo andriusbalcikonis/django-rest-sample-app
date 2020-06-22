@@ -5,14 +5,14 @@ from django.contrib import admin
 from django.views.generic.base import RedirectView
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
-from .users.views import UserViewSet
-from .menuratings.views import (
+from .mr.views import (
     RestaurantViewSet,
     RestaurantRepresenterViewSet,
     MenuViewSet,
     OrganizationViewSet,
     OrganizationRepresenterViewSet,
     VoteViewSet,
+    UserViewSet,
 )
 
 router = DefaultRouter()

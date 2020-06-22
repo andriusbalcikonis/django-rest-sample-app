@@ -5,7 +5,7 @@ PIP = $(PYBIN)/pip
 
 
 .PHONY: default-setup
-default-setup: check ensure-local-db
+default-setup: check ensure-local-db test
 
 .PHONY: help
 help:
@@ -29,8 +29,10 @@ check: $(ENV)/.pip-install-done
 
 	# Flake8 linter after that:
 	$(PYBIN)/flake8 menuratings
-	
-	# Tests:
+
+.PHONY: test
+test: check ensure-local-db
+	# Tests and coverage:
 	$(PYBIN)/pytest --cov . --cov-report html:htmlcov
 
 .PHONY: ensure-local-db
