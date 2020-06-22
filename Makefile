@@ -31,7 +31,7 @@ check: $(ENV)/.pip-install-done
 	$(PYBIN)/flake8 menuratings
 	
 	# Tests:
-	$(PYBIN)/pytest
+	$(PYBIN)/pytest --cov . --cov-report html:htmlcov
 
 .PHONY: ensure-local-db
 ensure-local-db: $(ENV)/.pip-install-done
