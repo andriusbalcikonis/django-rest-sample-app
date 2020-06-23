@@ -16,11 +16,7 @@ class CanWorkWithUserData(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        if not view.action:
-            # Empty action is for "OPTIONS" request:
-            return True
-        else:
-            return view.action in self._get_allowed_actions(request.user, obj)
+        return view.action in self._get_allowed_actions(request.user, obj)
 
     def has_permission(self, request, view):
         return self.has_object_permission(request, view, None)
