@@ -7,8 +7,47 @@ from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
 
 
+class Restaurant(models.Model):
+    name = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+
+class Menu(models.Model):
+    date = models.DateField()
+    contents = models.TextField()
+
+    restaurant = models.ForeignKey(
+        Restaurant, related_name="posted_menus", on_delete=models.CASCADE
+    )
+
+
+class Organization(models.Model):
+    name = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    represented_restaurant = models.ForeignKey(
+        Restaurant,
+        related_name="users",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+
+    represented_organization = models.ForeignKey(
+        Organization,
+        related_name="employees",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
         return self.username
@@ -20,46 +59,6 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 
-class Restaurant(models.Model):
-    name = models.TextField()
-
-    def __str__(self):
-        return self.name
-
-
-class RestaurantRepresenter(models.Model):
-    user = models.ForeignKey(
-        User, related_name="represented_restaurants", on_delete=models.CASCADE
-    )
-    restaurant = models.ForeignKey(
-        Restaurant, related_name="users", on_delete=models.CASCADE
-    )
-
-
-class Menu(models.Model):
-    date = models.DateField()
-    contents = models.TextField()
-
-
-class Organization(models.Model):
-    name = models.TextField()
-
-    def __str__(self):
-        return self.name
-
-
-class OrganizationRepresenter(models.Model):
-    user = models.ForeignKey(
-        User, related_name="represented_organizations", on_delete=models.CASCADE
-    )
-    organization = models.ForeignKey(
-        Organization, related_name="users", on_delete=models.CASCADE
-    )
-    is_org_admin = models.BooleanField()
-
-
 class Vote(models.Model):
-    voter = models.ForeignKey(
-        OrganizationRepresenter, related_name="votes", on_delete=models.CASCADE
-    )
+    voter = models.ForeignKey(User, related_name="votes", on_delete=models.CASCADE)
     menu = models.ForeignKey(Menu, related_name="votes", on_delete=models.CASCADE)

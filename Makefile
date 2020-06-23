@@ -34,7 +34,7 @@ check: $(ENV)/.pip-install-done
 .PHONY: test
 test: check
 	# Tests and coverage:
-	$(PYBIN)/pytest --cov . --cov-report html:htmlcov
+	$(PYBIN)/pytest --cov . --cov-report html:htmlcov --exitfirst
 
 .PHONY: ensure-local-db
 ensure-local-db: $(ENV)/.pip-install-done

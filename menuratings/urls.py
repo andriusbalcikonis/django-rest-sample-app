@@ -7,10 +7,8 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
 from .mr.views import (
     RestaurantViewSet,
-    RestaurantRepresenterViewSet,
     MenuViewSet,
     OrganizationViewSet,
-    OrganizationRepresenterViewSet,
     VoteViewSet,
     UserViewSet,
 )
@@ -18,10 +16,8 @@ from .mr.views import (
 router = DefaultRouter()
 router.register(r"users", UserViewSet, basename="user")
 router.register(r"restaurants", RestaurantViewSet)
-router.register(r"restaurant-representers", RestaurantRepresenterViewSet)
 router.register(r"menus", MenuViewSet)
 router.register(r"orgs", OrganizationViewSet)
-router.register(r"org-representers", OrganizationRepresenterViewSet)
 router.register(r"votes", VoteViewSet)
 
 urlpatterns = [

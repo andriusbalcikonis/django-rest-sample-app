@@ -1,20 +1,10 @@
 from rest_framework import viewsets
 from .permissions import CanWorkWithUserData, IsSuperAdmin
-from menuratings.mr.models import (
-    Restaurant,
-    RestaurantRepresenter,
-    Menu,
-    Organization,
-    OrganizationRepresenter,
-    Vote,
-    User,
-)
+from menuratings.mr.models import Restaurant, Menu, Organization, User, Vote
 from menuratings.mr.serializers import (
     RestaurantSerializer,
-    RestaurantRepresenterSerializer,
     MenuSerializer,
     OrganizationSerializer,
-    OrganizationRepresenterSerializer,
     VoteSerializer,
     UserSerializer,
     CreateUserSerializer,
@@ -63,16 +53,6 @@ class RestaurantViewSet(viewsets.ModelViewSet):
     #     serializer.save(owner=self.request.user)
 
 
-class RestaurantRepresenterViewSet(viewsets.ModelViewSet):
-    """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
-    """
-
-    queryset = RestaurantRepresenter.objects.all()
-    serializer_class = RestaurantRepresenterSerializer
-
-
 class MenuViewSet(viewsets.ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
@@ -91,16 +71,6 @@ class OrganizationViewSet(viewsets.ModelViewSet):
 
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
-
-
-class OrganizationRepresenterViewSet(viewsets.ModelViewSet):
-    """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
-    """
-
-    queryset = OrganizationRepresenter.objects.all()
-    serializer_class = OrganizationRepresenterSerializer
 
 
 class VoteViewSet(viewsets.ModelViewSet):
