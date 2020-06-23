@@ -23,7 +23,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields = ("username",)
 
 
-class CreateUserSerializer(serializers.HyperlinkedModelSerializer):
+class CreateUserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # call create_user on user object. Without this
         # the password will be stored in plain text.
