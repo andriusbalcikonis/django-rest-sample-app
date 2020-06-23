@@ -55,26 +55,26 @@ def test_normal_user_can_view_his_data(client, db):
     assert select_field(user, "username") == username
 
 
-def test_normal_user_can_edit_his_data(api_client, db):
+def test_normal_user_can_edit_his_data(client, db):
     username = "some_new_user"
     first_name = "First name"
     last_name = "Last name"
 
-    do_create_user_and_login(api_client, username)
+    do_create_user_and_login(client, username)
 
     # Get userlist:
-    user_list = http_get_user_list(api_client)
+    user_list = http_get_user_list(client)
 
     # Update user item:
     user_item = select_first_item(user_list)
     user_item["first_name"] = first_name
     user_item["last_name"] = last_name
-    user = http_put_user(api_client, user_item)
+    user = http_put_user(client, user_item)
     assert user.status_code == status.HTTP_200_OK
 
     # Get user item:
     url = select_field(user, "url")
-    user = http_get_user(api_client, url)
+    user = http_get_user(client, url)
 
     # Check it's username and names:
     assert select_field(user, "username") == username
