@@ -1,13 +1,15 @@
-from menuratings.mr.models import User
-
 from django.urls import reverse
 from rest_framework import status
+from menuratings.mr.models import User
+
+
+# Constants:
 
 ADMIN_USER_USERNAME = "admin"
 ADMIN_USER_PWD = "admin"
 
 
-# Tests - user list
+# Tests. User list
 
 
 def test_user_list_for_anonymous_user_is_accessible_but_empty(client, db):
@@ -23,7 +25,7 @@ def test_user_list_for_admin_user_is_accessible_and_has_one_item(client, db):
     assert_result_count(response, 1)
 
 
-# Helpers - initial conditions:
+# Helpers. Initial conditions:
 
 
 def set_initial_conditions_empty_db():
@@ -36,21 +38,21 @@ def set_initial_conditions_only_admin_user():
     )
 
 
-# Helpers - login:
+# Helpers. Login:
 
 
 def login_as_admin(client):
     client.login(username=ADMIN_USER_USERNAME, password=ADMIN_USER_PWD)
 
 
-# Helpers - http requests:
+# Helpers. Requests:
 
 
 def http_get_user_list(client):
     return client.get(reverse("user-list"))
 
 
-# Helpers - assertions
+# Helpers. Assertions
 
 
 def assert_result_count(response, count):
