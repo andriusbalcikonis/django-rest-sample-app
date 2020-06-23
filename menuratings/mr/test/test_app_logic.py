@@ -14,41 +14,60 @@ ANY_USER_EMAIL = "some@email.com"
 
 
 def test_user_list_for_anonymous_user_is_accessible_but_empty(client, db):
-    response = http_get_user_list(client)
-    assert_result_count(response, 0)
+    user_list = http_get_user_list(client)
+    assert_result_count(user_list, 0)
 
 
 def test_user_list_for_anonymous_user_is_accessible_but_empty_even_if_users_exist_in_db(
     client, db
 ):
     set_initial_conditions_only_admin_user()
-    response = http_get_user_list(client)
-    assert_result_count(response, 0)
+    user_list = http_get_user_list(client)
+    assert_result_count(user_list, 0)
 
 
 def test_user_list_for_admin_user_is_accessible_and_has_one_item(client, db):
     set_initial_conditions_only_admin_user()
-    login(client, ADMIN_USER_USERNAME)
+    do_login(client, ADMIN_USER_USERNAME)
 
-    response = http_get_user_list(client)
-    assert_result_count(response, 1)
+    user_list = http_get_user_list(client)
+    assert_result_count(user_list, 1)
 
 
-def test_user_list_for_anonymous_user_allows_to_create_user_and_new_user_is_able_to_login(
-    client, db
-):
+def test_user_list_for_anonymous_user_allows_to_create_new_user(client, db):
+    username = "some_new_user"
+    do_create_user_and_login(client, username)
+
+
+def test_normal_user_can_view_his_data(client, db):
     username = "some_new_user"
 
-    # Create:
-    response = http_post_create_user_form(client, username)
-    assert_created_successfully(response)
+    do_create_user_and_login(client, username)
 
-    # Try to login:
-    login(client, username)
+    # Get userlist:
+    user_list = http_get_user_list(client)
 
-    # Userlist contains single item:
-    response = http_get_user_list(client)
-    assert_result_count(response, 1)
+    # Get user item:
+    url = select_first_item_field(user_list, "url")
+    user_item = http_get_by_url(client, url)
+    print(user_item)
+
+    # Check it's name:
+    created_username = select_field(user_item, "username")
+    assert created_username == username
+
+
+# Helpers. Reused test blocks:
+
+
+def do_login(client, username):
+    client.login(username=username, password=ANY_USER_PWD)
+
+
+def do_create_user_and_login(client, username):
+    created_user = http_post_create_user_form(client, username)
+    assert_created_successfully(created_user)
+    do_login(client, username)
 
 
 # Helpers. Initial conditions:
@@ -58,14 +77,11 @@ def set_initial_conditions_only_admin_user():
     User.objects.create_superuser(ADMIN_USER_USERNAME, "admin@admin.com", ANY_USER_PWD)
 
 
-# Helpers. Login:
-
-
-def login(client, username):
-    client.login(username=username, password=ANY_USER_PWD)
-
-
 # Helpers. Requests:
+
+
+def http_get_by_url(client, url):
+    return client.get(url)
 
 
 def http_get_user_list(client):
@@ -89,3 +105,14 @@ def assert_result_count(response, count):
 
 def assert_created_successfully(response):
     assert response.status_code == status.HTTP_201_CREATED
+
+
+# Helpers. Selectors:
+
+
+def select_first_item_field(response, field_name):
+    return response.data["results"][0][field_name]
+
+
+def select_field(response, field_name):
+    return response.data[field_name]
