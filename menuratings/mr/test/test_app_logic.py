@@ -10,7 +10,7 @@ ANY_USER_PWD = "admin"
 ANY_USER_EMAIL = "some@email.com"
 
 
-# Tests. User list
+# Tests. User list - functional tests.
 
 
 def test_user_list_for_anonymous_user_is_accessible_but_empty(client, db):
@@ -48,13 +48,38 @@ def test_normal_user_can_view_his_data(client, db):
     user_list = http_get_user_list(client)
 
     # Get user item:
-    url = select_first_item_field(user_list, "url")
-    user_item = http_get_by_url(client, url)
-    print(user_item)
+    url = select_first_item(user_list)["url"]
+    user = http_get_user(client, url)
 
     # Check it's name:
-    created_username = select_field(user_item, "username")
-    assert created_username == username
+    assert select_field(user, "username") == username
+
+
+def test_normal_user_can_edit_his_data(api_client, db):
+    username = "some_new_user"
+    first_name = "First name"
+    last_name = "Last name"
+
+    do_create_user_and_login(api_client, username)
+
+    # Get userlist:
+    user_list = http_get_user_list(api_client)
+
+    # Update user item:
+    user_item = select_first_item(user_list)
+    user_item["first_name"] = first_name
+    user_item["last_name"] = last_name
+    user = http_put_user(api_client, user_item)
+    assert user.status_code == status.HTTP_200_OK
+
+    # Get user item:
+    url = select_field(user, "url")
+    user = http_get_user(api_client, url)
+
+    # Check it's username and names:
+    assert select_field(user, "username") == username
+    assert select_field(user, "first_name") == first_name
+    assert select_field(user, "last_name") == last_name
 
 
 # Helpers. Reused test blocks:
@@ -65,8 +90,8 @@ def do_login(client, username):
 
 
 def do_create_user_and_login(client, username):
-    created_user = http_post_create_user_form(client, username)
-    assert_created_successfully(created_user)
+    created_user = http_post_user(client, username)
+    assert created_user.status_code == status.HTTP_201_CREATED
     do_login(client, username)
 
 
@@ -80,19 +105,23 @@ def set_initial_conditions_only_admin_user():
 # Helpers. Requests:
 
 
-def http_get_by_url(client, url):
-    return client.get(url)
-
-
 def http_get_user_list(client):
     return client.get(reverse("user-list"))
 
 
-def http_post_create_user_form(client, username):
+def http_post_user(client, username):
     return client.post(
         reverse("user-list"),
         data={"username": username, "email": ANY_USER_EMAIL, "password": ANY_USER_PWD},
     )
+
+
+def http_get_user(client, url):
+    return client.get(url)
+
+
+def http_put_user(client, user_item):
+    return client.put(user_item["url"], data=user_item)
 
 
 # Helpers. Assertions
@@ -103,15 +132,11 @@ def assert_result_count(response, count):
     assert len(response.data["results"]) == count
 
 
-def assert_created_successfully(response):
-    assert response.status_code == status.HTTP_201_CREATED
-
-
 # Helpers. Selectors:
 
 
-def select_first_item_field(response, field_name):
-    return response.data["results"][0][field_name]
+def select_first_item(response):
+    return response.data["results"][0]
 
 
 def select_field(response, field_name):

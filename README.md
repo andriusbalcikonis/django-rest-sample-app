@@ -27,12 +27,17 @@ TODO
 1. `make run`
 2. Open http://localhost:8000
 
-Clarification: `make run` (or any `make` command) will ensure a few things automatically:
+Clarification: `make run` (or any `make` command) will ensure a few things automatically, before starting the app:
 
 1. Install dependencies (virtualenv, pip install)
-2. Perform checks (formatting, linting, testing)
+2. Perform checks (formatting, linting)
 3. Startup local DBs
 4. Apply migrations
+5. Run tests
+
+**To run checks (linting, formatting) and tests:**
+
+1. `make test`
 
 **To create superadmin user:**
 

@@ -11,6 +11,7 @@ default-setup: check ensure-local-db test
 help:
 	@echo "make                       # Prepare (virtualenv, pip install, run dbs, migrations, format, lint and run tests)"
 	@echo "make run                   # (Prepare and) Launch local app"
+	@echo "make test                  # (Prepare and) Run tests"
 	@echo "make createsuperuser       # (Prepare and) Create admin user"
 
 $(ENV)/.virtual-env-created:
@@ -31,7 +32,7 @@ check: $(ENV)/.pip-install-done
 	$(PYBIN)/flake8 menuratings
 
 .PHONY: test
-test: check ensure-local-db
+test: check
 	# Tests and coverage:
 	$(PYBIN)/pytest --cov . --cov-report html:htmlcov
 
