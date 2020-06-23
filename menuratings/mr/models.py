@@ -36,7 +36,7 @@ class User(AbstractUser):
     represented_restaurant = models.ForeignKey(
         Restaurant,
         related_name="users",
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
     )
@@ -44,7 +44,7 @@ class User(AbstractUser):
     represented_organization = models.ForeignKey(
         Organization,
         related_name="employees",
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
     )
