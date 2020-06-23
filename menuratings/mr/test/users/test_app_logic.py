@@ -69,6 +69,8 @@ def test_normal_user_can_edit_his_data(client, db):
     user_item = select_first_item(user_list)
     user_item["first_name"] = first_name
     user_item["last_name"] = last_name
+    user_item["represented_restaurant"] = ""
+    user_item["represented_organization"] = ""
     user = http_put_user(client, user_item)
     assert user.status_code == status.HTTP_200_OK
 

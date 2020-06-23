@@ -22,6 +22,9 @@ class Menu(models.Model):
         Restaurant, related_name="posted_menus", on_delete=models.CASCADE
     )
 
+    def __str__(self):
+        return "Restaurant '{}' menu of {}".format(self.restaurant, self.date)
+
 
 class Organization(models.Model):
     name = models.TextField()

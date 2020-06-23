@@ -17,6 +17,27 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "username",
             "first_name",
             "last_name",
+            "represented_restaurant",
+            "represented_organization",
+        )
+        read_only_fields = (
+            "username",
+            "represented_restaurant",
+            "represented_organization",
+        )
+
+
+class UserSerializerForAdmin(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "url",
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "represented_restaurant",
+            "represented_organization",
         )
         read_only_fields = ("username",)
 

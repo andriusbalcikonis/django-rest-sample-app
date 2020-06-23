@@ -7,6 +7,7 @@ from menuratings.mr.serializers import (
     OrganizationSerializer,
     VoteSerializer,
     UserSerializer,
+    UserSerializerForAdmin,
     CreateUserSerializer,
 )
 
@@ -34,9 +35,13 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return UserSerializer
-        if self.action == "create":
+        elif self.action == "create":
             return CreateUserSerializer
-        return UserSerializer
+        else:
+            if self.request.user.is_superuser:
+                return UserSerializerForAdmin
+            else:
+                return UserSerializer
 
 
 class RestaurantViewSet(viewsets.ModelViewSet):
