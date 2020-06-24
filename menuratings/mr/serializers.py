@@ -6,7 +6,7 @@ from menuratings.mr.models import (
     Vote,
     User,
 )
-from menuratings.mr.external import get_todays_date
+from menuratings.mr.helpers.external_dependencies import get_todays_date
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -128,6 +128,11 @@ class MyTodaysOptionsMenuSerializer(serializers.HyperlinkedModelSerializer):
             return votes
         else:
             return -1
+
+    is_todays_winner = serializers.SerializerMethodField("get_is_todays_winner")
+
+    def get_is_todays_winner(self, current_menu_item):
+        return True
 
     def get_context_user(self):
         request = self.context.get("request")

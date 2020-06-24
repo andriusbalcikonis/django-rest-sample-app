@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from menuratings.mr.external import get_todays_date
+from menuratings.mr.helpers.external_dependencies import get_todays_date
 from menuratings.mr.models import Menu, Vote
 
 

@@ -21,7 +21,7 @@ from menuratings.mr.serializers import (
     UserSerializerForAdmin,
     CreateUserSerializer,
 )
-from menuratings.mr.external import get_todays_date
+from menuratings.mr.helpers.external_dependencies import get_todays_date
 
 
 class MyUserViewSet(viewsets.ModelViewSet):
