@@ -7,7 +7,7 @@ from menuratings.mr.helpers.complex_queries import get_voting_results_of_the_day
 
 NUM_OF_DAYS = 5
 NUM_OF_RESTAURANTS = 3
-NUM_OF_USERS = 3
+NUM_OF_USERS = 10
 
 CURRENT_DAY_INDEX = NUM_OF_DAYS - 1
 
@@ -32,6 +32,22 @@ tests = [
         "scenario": "One vote today, but by user from other org - empty results",
         "input_votes": [{"day": 4, "other_org": True, "user": 0, "menu": 0}],
         "expected_output_results": [],
+    },
+    {
+        "scenario": "Menu '1' wins with 3 votes",
+        "input_votes": [
+            {"day": 4, "user": 0, "menu": 0},
+            {"day": 4, "user": 1, "menu": 1},
+            {"day": 4, "user": 2, "menu": 1},
+            {"day": 4, "user": 3, "menu": 1},
+            {"day": 4, "user": 4, "menu": 2},
+            {"day": 4, "user": 5, "menu": 2},
+        ],
+        "expected_output_results": [
+            {"menu": 1, "total_votes": 3},
+            {"menu": 2, "total_votes": 2},
+            {"menu": 0, "total_votes": 1},
+        ],
     },
 ]
 
@@ -64,7 +80,6 @@ def test_get_voting_results_of_the_day(test_data, db):
     results = get_voting_results_of_the_day(current_day, org.id)
 
     # Step 5. Transform expected output to have menu_ids:
-
     expected_output_results_transformed = transform_expected_output_results(
         expected_output_results, days_and_menus
     )
