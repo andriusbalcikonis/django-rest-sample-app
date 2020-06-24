@@ -10,6 +10,7 @@ from menuratings.mr.serializers import (
     UserSerializerForAdmin,
     CreateUserSerializer,
 )
+from menuratings.mr.external import get_todays_date
 
 
 class MyUserViewSet(viewsets.ModelViewSet):
@@ -33,6 +34,24 @@ class MyUserViewSet(viewsets.ModelViewSet):
             return CreateUserSerializer
         else:
             return UserSerializer
+
+
+class MyRestaurantTodaysMenuViewSet(viewsets.ModelViewSet):
+    def get_queryset(self):
+        """
+        Filter menus only from my restaurant and from today
+        """
+        represented_restaurant_id = self.request.user.represented_restaurant_id
+        today = get_todays_date()
+        if represented_restaurant_id:
+            return Menu.objects.filter(date=today).filter(
+                restaurant_id=represented_restaurant_id
+            )
+        else:
+            return Menu.objects.none()
+
+    serializer_class = MenuSerializer
+    permission_classes = [IsSuperAdmin]
 
 
 class AdminUserViewSet(viewsets.ModelViewSet):

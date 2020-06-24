@@ -1,9 +1,10 @@
 from rest_framework import permissions
+from menuratings.mr.external import get_todays_date
 
 
 class IsSuperAdmin(permissions.BasePermission):
     """
-    Custom permission to only allow owners of an object to edit it.
+    Custom permission to allow actions only for admin
     """
 
     def has_permission(self, request, view):
@@ -12,7 +13,7 @@ class IsSuperAdmin(permissions.BasePermission):
 
 class CanWorkWithMyUserData(permissions.BasePermission):
     """
-    Permissions for "MyUser" viewset
+    Permissions for my user data
     """
 
     def has_object_permission(self, request, view, obj):
@@ -33,7 +34,7 @@ class CanWorkWithMyUserData(permissions.BasePermission):
 
 class CanWorkWithAnyUserData(permissions.BasePermission):
     """
-    Permissions for "AdminUser" viewset
+    Permissions for users list for admin
     """
 
     def has_object_permission(self, request, view, obj):
@@ -48,3 +49,19 @@ class CanWorkWithAnyUserData(permissions.BasePermission):
             return ["list", "retrieve", "update", "destroy"]
         else:
             return []
+
+
+class CanWorkWithMyRestaurantMenu(permissions.BasePermission):
+    """
+    Permissions for my restaurant menu
+    """
+
+    def has_object_permission(self, request, view, menu_item):
+        if menu_item.restaurant_id == request.user.represented_restaurant_id:
+            return menu_item.date == get_todays_date()
+        else:
+            return False
+
+    def has_permission(self, request, view):
+        user_is_representing_any_restaurant = bool(self.user_represented_restaurant_id)
+        return user_is_representing_any_restaurant

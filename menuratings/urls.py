@@ -7,6 +7,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
 from .mr.views import (
     MyUserViewSet,
+    MyRestaurantTodaysMenuViewSet,
     AdminRestaurantViewSet,
     AdminMenuViewSet,
     AdminOrganizationViewSet,
@@ -16,6 +17,11 @@ from .mr.views import (
 
 router = DefaultRouter()
 router.register(r"my-user", MyUserViewSet, basename="my-user")
+router.register(
+    r"my-restaurant-todays-menu",
+    MyRestaurantTodaysMenuViewSet,
+    basename="my-restaurant-todays-menu",
+)
 router.register(r"admin-users", AdminUserViewSet)
 router.register(r"admin-restaurants", AdminRestaurantViewSet)
 router.register(r"admin-menus", AdminMenuViewSet)
