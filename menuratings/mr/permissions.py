@@ -4,11 +4,20 @@ from menuratings.mr.external import get_todays_date
 
 class IsSuperAdmin(permissions.BasePermission):
     """
-    Custom permission to allow actions only for admin
+    Allow actions only for admin
     """
 
     def has_permission(self, request, view):
         return request.user.is_superuser
+
+
+class IsOrganizationUser(permissions.BasePermission):
+    """
+    Allow actions only for organization users
+    """
+
+    def has_permission(self, request, view):
+        return bool(request.user.represented_organization)
 
 
 class CanWorkWithMyUserData(permissions.BasePermission):
@@ -63,5 +72,7 @@ class CanWorkWithMyRestaurantMenu(permissions.BasePermission):
             return False
 
     def has_permission(self, request, view):
-        user_is_representing_any_restaurant = bool(self.user_represented_restaurant_id)
+        user_is_representing_any_restaurant = bool(
+            request.user.represented_restaurant_id
+        )
         return user_is_representing_any_restaurant

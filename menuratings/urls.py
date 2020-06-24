@@ -8,6 +8,7 @@ from rest_framework.authtoken import views
 from .mr.views import (
     MyUserViewSet,
     MyRestaurantTodaysMenuViewSet,
+    MyTodaysOptionsViewSet,
     AdminRestaurantViewSet,
     AdminMenuViewSet,
     AdminOrganizationViewSet,
@@ -21,6 +22,9 @@ router.register(
     r"my-restaurant-todays-menu",
     MyRestaurantTodaysMenuViewSet,
     basename="my-restaurant-todays-menu",
+)
+router.register(
+    r"my-todays-options", MyTodaysOptionsViewSet, basename="my-restaurant-todays-menu",
 )
 router.register(r"admin-users", AdminUserViewSet)
 router.register(r"admin-restaurants", AdminRestaurantViewSet)

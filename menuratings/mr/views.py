@@ -1,10 +1,17 @@
 from rest_framework import viewsets
-from .permissions import CanWorkWithMyUserData, CanWorkWithAnyUserData, IsSuperAdmin
+from .permissions import (
+    CanWorkWithMyUserData,
+    CanWorkWithAnyUserData,
+    IsSuperAdmin,
+    IsOrganizationUser,
+    CanWorkWithMyRestaurantMenu,
+)
 from menuratings.mr.models import Restaurant, Menu, Organization, User, Vote
 from menuratings.mr.serializers import (
     RestaurantSerializer,
     MenuSerializer,
     MyRestaurantTodaysMenuSerializer,
+    MyTodaysOptionsMenuSerializer,
     OrganizationSerializer,
     VoteSerializer,
     UserSerializer,
@@ -40,7 +47,7 @@ class MyUserViewSet(viewsets.ModelViewSet):
 class MyRestaurantTodaysMenuViewSet(viewsets.ModelViewSet):
 
     serializer_class = MyRestaurantTodaysMenuSerializer
-    permission_classes = [IsSuperAdmin]
+    permission_classes = [CanWorkWithMyRestaurantMenu]
 
     def get_queryset(self):
         """
@@ -59,6 +66,19 @@ class MyRestaurantTodaysMenuViewSet(viewsets.ModelViewSet):
         serializer.save(
             date=get_todays_date(), restaurant=self.request.user.represented_restaurant,
         )
+
+
+class MyTodaysOptionsViewSet(viewsets.ReadOnlyModelViewSet):
+
+    serializer_class = MyTodaysOptionsMenuSerializer
+    permission_classes = [IsOrganizationUser]
+
+    def get_queryset(self):
+        """
+        Filter menus - what are options for today
+        """
+        today = get_todays_date()
+        return Menu.objects.filter(date=today)
 
 
 class AdminUserViewSet(viewsets.ModelViewSet):
