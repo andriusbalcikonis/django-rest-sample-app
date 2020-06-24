@@ -13,6 +13,7 @@ from menuratings.mr.serializers import (
     MyRestaurantTodaysMenuSerializer,
     MyTodaysOptionsMenuSerializer,
     MyVoteSerializer,
+    MyVoteSerializerForEditing,
     OrganizationSerializer,
     VoteSerializer,
     UserSerializer,
@@ -84,14 +85,22 @@ class MyTodaysOptionsViewSet(viewsets.ReadOnlyModelViewSet):
 
 class MyVotesViewSet(viewsets.ModelViewSet):
 
-    serializer_class = MyVoteSerializer
     permission_classes = [IsOrganizationUser]
+
+    def get_serializer_class(self):
+        if self.action in ["create", "update"]:
+            return MyVoteSerializerForEditing
+        else:
+            return MyVoteSerializer
 
     def get_queryset(self):
         """
         Filter all previous votes of this user
         """
         return Vote.objects.filter(voter_id=self.request.user.id)
+
+    def perform_create(self, serializer):
+        serializer.save(voter=self.request.user)
 
 
 class AdminUserViewSet(viewsets.ModelViewSet):

@@ -120,6 +120,18 @@ class MyVoteSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["url", "id", "menu"]
 
 
+class MyVoteSerializerForEditing(serializers.HyperlinkedModelSerializer):
+    class MenuOptionsField(serializers.PrimaryKeyRelatedField):
+        def get_queryset(self):
+            return Menu.objects.all()
+
+    menu = MenuOptionsField(many=False, read_only=False)
+
+    class Meta:
+        model = Vote
+        fields = ["url", "id", "menu"]
+
+
 class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Organization

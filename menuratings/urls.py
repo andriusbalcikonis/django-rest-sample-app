@@ -25,7 +25,7 @@ router.register(
     basename="my-restaurant-todays-menu",
 )
 router.register(
-    r"my-todays-options", MyTodaysOptionsViewSet, basename="my-restaurant-todays-menu",
+    r"my-todays-options", MyTodaysOptionsViewSet, basename="my-todays-options",
 )
 router.register(
     r"my-votes", MyVotesViewSet, basename="my-vote",
