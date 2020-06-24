@@ -87,6 +87,12 @@ class MenuSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["url", "id", "date", "contents", "restaurant"]
 
 
+class MyRestaurantTodaysMenuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Menu
+        fields = ["contents"]
+
+
 class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Organization
