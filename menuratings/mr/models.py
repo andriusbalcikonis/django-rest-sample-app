@@ -29,6 +29,9 @@ class Menu(models.Model):
     def name(self):
         return "Restaurant '{}' menu of {}".format(self.restaurant, self.date)
 
+    class Meta:
+        unique_together = ["date", "restaurant"]
+
 
 class Organization(models.Model):
     name = models.TextField()

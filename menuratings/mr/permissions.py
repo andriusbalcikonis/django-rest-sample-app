@@ -1,5 +1,6 @@
 from rest_framework import permissions
 from menuratings.mr.external import get_todays_date
+from menuratings.mr.models import Menu, Vote
 
 
 class IsSuperAdmin(permissions.BasePermission):
@@ -72,7 +73,63 @@ class CanWorkWithMyRestaurantMenu(permissions.BasePermission):
             return False
 
     def has_permission(self, request, view):
+
         user_is_representing_any_restaurant = bool(
             request.user.represented_restaurant_id
         )
-        return user_is_representing_any_restaurant
+
+        if user_is_representing_any_restaurant:
+            if view.action == "create":
+                # Allow to upload only if nothing was uploaded today for this restaurant:
+                num_of_already_posted_today_by_my_restaurant = (
+                    Menu.objects.filter(
+                        restaurant_id=request.user.represented_restaurant_id
+                    )
+                    .filter(date=get_todays_date())
+                    .count()
+                )
+                can_upload_another_menu = (
+                    num_of_already_posted_today_by_my_restaurant == 0
+                )
+                return can_upload_another_menu
+            else:
+                # If I represent any restaurant, actions are allowed
+                # (detailed checks will be in has_object_permission)
+                return True
+        else:
+            # If not restaurant representer, no actions allowed
+            return False
+
+
+class CanAccessMyVotes(permissions.BasePermission):
+    """
+    Permissions for my votes
+    """
+
+    def has_permission(self, request, view):
+        if self.user_represents_any_org(request):
+            if view.action == "create":
+                # Allow to vote only if this is my first vote today
+                num_of_my_votes_today = (
+                    Vote.objects.filter(voter_id=request.user.id)
+                    .filter(menu__date=get_todays_date())
+                    .count()
+                )
+                can_post_another_vote = num_of_my_votes_today == 0
+                return can_post_another_vote
+            else:
+                # If I represent any org, actions are allowed
+                # (detailed checks will be in has_object_permission)
+                return True
+        else:
+            # If not org representer, no actions allowed
+            return False
+
+    def has_object_permission(self, request, view, vote_item):
+        return (
+            self.user_represents_any_org(request)
+            and vote_item.voter_id == request.user.id
+        )
+
+    def user_represents_any_org(self, request):
+        return not request.user.is_anonymous and request.user.represented_organization

@@ -5,6 +5,7 @@ from .permissions import (
     IsSuperAdmin,
     IsOrganizationUser,
     CanWorkWithMyRestaurantMenu,
+    CanAccessMyVotes,
 )
 from menuratings.mr.models import Restaurant, Menu, Organization, User, Vote
 from menuratings.mr.serializers import (
@@ -85,7 +86,7 @@ class MyTodaysOptionsViewSet(viewsets.ReadOnlyModelViewSet):
 
 class MyVotesViewSet(viewsets.ModelViewSet):
 
-    permission_classes = [IsOrganizationUser]
+    permission_classes = [CanAccessMyVotes]
 
     def get_serializer_class(self):
         if self.action in ["create", "update"]:
