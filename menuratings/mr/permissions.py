@@ -17,7 +17,7 @@ class IsOrganizationUser(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return bool(request.user.represented_organization)
+        return not request.user.is_anonymous and request.user.represented_organization
 
 
 class CanWorkWithMyUserData(permissions.BasePermission):

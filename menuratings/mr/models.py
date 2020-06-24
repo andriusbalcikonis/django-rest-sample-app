@@ -23,6 +23,10 @@ class Menu(models.Model):
     )
 
     def __str__(self):
+        return self.name
+
+    @property
+    def name(self):
         return "Restaurant '{}' menu of {}".format(self.restaurant, self.date)
 
 

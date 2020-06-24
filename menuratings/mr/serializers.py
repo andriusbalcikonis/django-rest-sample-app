@@ -109,6 +109,17 @@ class MyTodaysOptionsMenuSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["restaurant", "contents"]
 
 
+class MyVoteSerializer(serializers.HyperlinkedModelSerializer):
+
+    url = serializers.HyperlinkedIdentityField(view_name="my-vote-detail")
+
+    menu = serializers.SlugRelatedField(many=False, read_only=True, slug_field="name")
+
+    class Meta:
+        model = Vote
+        fields = ["url", "id", "menu"]
+
+
 class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Organization

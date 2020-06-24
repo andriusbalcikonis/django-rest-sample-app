@@ -9,6 +9,7 @@ from .mr.views import (
     MyUserViewSet,
     MyRestaurantTodaysMenuViewSet,
     MyTodaysOptionsViewSet,
+    MyVotesViewSet,
     AdminRestaurantViewSet,
     AdminMenuViewSet,
     AdminOrganizationViewSet,
@@ -25,6 +26,9 @@ router.register(
 )
 router.register(
     r"my-todays-options", MyTodaysOptionsViewSet, basename="my-restaurant-todays-menu",
+)
+router.register(
+    r"my-votes", MyVotesViewSet, basename="my-vote",
 )
 router.register(r"admin-users", AdminUserViewSet)
 router.register(r"admin-restaurants", AdminRestaurantViewSet)
