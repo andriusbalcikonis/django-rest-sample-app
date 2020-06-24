@@ -6,19 +6,21 @@ from django.views.generic.base import RedirectView
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
 from .mr.views import (
-    RestaurantViewSet,
-    MenuViewSet,
-    OrganizationViewSet,
-    VoteViewSet,
-    UserViewSet,
+    MyUserViewSet,
+    AdminRestaurantViewSet,
+    AdminMenuViewSet,
+    AdminOrganizationViewSet,
+    AdminVoteViewSet,
+    AdminUserViewSet,
 )
 
 router = DefaultRouter()
-router.register(r"users", UserViewSet, basename="user")
-router.register(r"restaurants", RestaurantViewSet)
-router.register(r"menus", MenuViewSet)
-router.register(r"orgs", OrganizationViewSet)
-router.register(r"votes", VoteViewSet)
+router.register(r"my-user", MyUserViewSet, basename="my-user")
+router.register(r"admin-users", AdminUserViewSet)
+router.register(r"admin-restaurants", AdminRestaurantViewSet)
+router.register(r"admin-menus", AdminMenuViewSet)
+router.register(r"admin-organizations", AdminOrganizationViewSet)
+router.register(r"admin-votes", AdminVoteViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),

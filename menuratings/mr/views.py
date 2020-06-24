@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from .permissions import CanWorkWithUserData, IsSuperAdmin
+from .permissions import CanWorkWithMyUserData, CanWorkWithAnyUserData, IsSuperAdmin
 from menuratings.mr.models import Restaurant, Menu, Organization, User, Vote
 from menuratings.mr.serializers import (
     RestaurantSerializer,
@@ -12,13 +12,9 @@ from menuratings.mr.serializers import (
 )
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
-    """
+class MyUserViewSet(viewsets.ModelViewSet):
 
-    permission_classes = (CanWorkWithUserData,)
+    permission_classes = (CanWorkWithMyUserData,)
 
     def get_queryset(self):
         """
@@ -27,8 +23,6 @@ class UserViewSet(viewsets.ModelViewSet):
         """
         if self.request.user.is_anonymous:
             return User.objects.none()
-        elif self.request.user.is_superuser:
-            return User.objects.all()
         else:
             return User.objects.filter(id=self.request.user.id)
 
@@ -38,51 +32,39 @@ class UserViewSet(viewsets.ModelViewSet):
         elif self.action == "create":
             return CreateUserSerializer
         else:
-            if self.request.user.is_superuser:
-                return UserSerializerForAdmin
-            else:
-                return UserSerializer
+            return UserSerializer
 
 
-class RestaurantViewSet(viewsets.ModelViewSet):
-    """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
-    """
+class AdminUserViewSet(viewsets.ModelViewSet):
+
+    queryset = User.objects.all()
+    serializer_class = UserSerializerForAdmin
+    permission_classes = [CanWorkWithAnyUserData]
+
+
+class AdminRestaurantViewSet(viewsets.ModelViewSet):
 
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
     permission_classes = [IsSuperAdmin]
 
-    # def perform_create(self, serializer):
-    #     serializer.save(owner=self.request.user)
 
-
-class MenuViewSet(viewsets.ModelViewSet):
-    """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
-    """
+class AdminMenuViewSet(viewsets.ModelViewSet):
 
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
+    permission_classes = [IsSuperAdmin]
 
 
-class OrganizationViewSet(viewsets.ModelViewSet):
-    """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
-    """
+class AdminOrganizationViewSet(viewsets.ModelViewSet):
 
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
+    permission_classes = [IsSuperAdmin]
 
 
-class VoteViewSet(viewsets.ModelViewSet):
-    """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
-    """
+class AdminVoteViewSet(viewsets.ModelViewSet):
 
     queryset = Vote.objects.all()
     serializer_class = VoteSerializer
+    permission_classes = [IsSuperAdmin]
