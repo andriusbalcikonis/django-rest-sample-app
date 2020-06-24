@@ -8,9 +8,50 @@ This is a simple django rest app, which I built as a job-interview task.
 
 TODO
 
-## Solution
+## Solution - API design
 
-TODO
+| Endpoint                       | HTTP method | Action                                                            | Allowed for users              |
+| :----------------------------- | :---------- | :---------------------------------------------------------------- | :----------------------------- |
+| my-user                        | POST        | Create new user                                                   | Anonymous                      |
+| my-user                        | GET         | Get my user profile (including represented restaurant and/or org) | Any user                       |
+| my-user                        | PUT         | Update my user profile details                                    | Any user                       |
+| my-user                        | DELETE      | Delete my user                                                    | Any user                       |
+| my-restaurant-users            | GET         | Lists users of my restaurant                                      | User representing restaurant   |
+| my-restaurant-users            | POST        | Invites another user to my restaurant                             | User representing restaurant   |
+| my-restaurant-users/[id]       | GET         | Lists users of my restaurant                                      | User representing restaurant   |
+| my-restaurant-users/[id]       | DELETE      | Removes user from my restaurant                                   | User representing restaurant   |
+| my-restaurant-todays-menu      | GET         | Get todays menu                                                   | User representing restaurant   |
+| my-restaurant-todays-menu      | POST        | Create todays menu                                                | User representing restaurant   |
+| my-restaurant-todays-menu      | PUT         | Update todays menu                                                | User representing restaurant   |
+| my-restaurant-todays-menu      | DELETE      | Delete todays menu                                                | User representing restaurant   |
+| my-organization-users          | GET         | Lists users of my organization                                    | User representing organization |
+| my-organization-users          | POST        | Invites another user to my organization                           | User representing organization |
+| my-organization-users/[id]     | GET         | Lists users of my organization                                    | User representing organization |
+| my-organization-users/[id]     | DELETE      | Removes user from my organization                                 | User representing organization |
+| my-organization-voting-results | GET         | Voting results inside my organization                             | User representing organization |
+| my-todays-vote-options         | GET         | Lists todays vote options                                         | User representing organization |
+| my-todays-vote                 | POST        | Post my vote                                                      | User representing organization |
+| my-todays-vote                 | GET         | Get my vote                                                       | User representing organization |
+| my-todays-vote                 | DELETE      | Take back my vote                                                 | User representing organization |
+| admin-users                    | GET         | Lists all users                                                   | Admin                          |
+| admin-users                    | POST        | Add new user                                                      | Admin                          |
+| admin-users/[id]               | GET         | Get user                                                          | Admin                          |
+| admin-users/[id]               | PUT         | Updates user (including represented restaurant and/or org)        | Admin                          |
+| admin-users/[id]               | DELETE      | Delete user                                                       | Admin                          |
+| admin-restaurants              | GET         | Lists all restaurants                                             | Admin                          |
+| admin-restaurants              | POST        | Add new restaurant                                                | Admin                          |
+| admin-restaurants/[id]         | GET         | Get restaurant                                                    | Admin                          |
+| admin-restaurants/[id]         | PUT         | Update restaurant                                                 | Admin                          |
+| admin-restaurants/[id]         | DELETE      | Delete restaurant                                                 | Admin                          |
+| admin-organizations            | GET         | Lists all organizations                                           | Admin                          |
+| admin-organizations            | POST        | Add new organization                                              | Admin                          |
+| admin-organizations/[id]       | GET         | Get organization                                                  | Admin                          |
+| admin-organizations/[id]       | PUT         | Update organization                                               | Admin                          |
+| admin-organizations/[id]       | DELETE      | Delete organization                                               | Admin                          |
+| admin-menus                    | GET         | Lists all menus                                                   | Admin                          |
+| admin-menus/[id]               | GET         | Get menu                                                          | Admin                          |
+| admin-menus/[id]               | DELETE      | Delete menu                                                       | Admin                          |
+| admin-votes                    | GET         | Lists all votes                                                   | Admin                          |
 
 ## Local Development
 
