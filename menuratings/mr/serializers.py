@@ -34,6 +34,14 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     url = serializers.HyperlinkedIdentityField(view_name="my-user-detail")
 
+    represented_restaurant = serializers.SlugRelatedField(
+        many=False, read_only=True, slug_field="name"
+    )
+
+    represented_organization = serializers.SlugRelatedField(
+        many=False, read_only=True, slug_field="name"
+    )
+
     class Meta:
         model = User
         fields = (
