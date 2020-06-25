@@ -20,9 +20,11 @@ In real world, this would be clarified with PO or clients. This is an excersize,
 6. Restaurant representing users can upload restaurant todays menu, change it and delete it, but only that day and only one menu per day (previous will be overwritten).
 7. Organization users can see todays voting options.
 8. Todays voting stats are displayed for everyone in the same view as their voting options. They are calculated only for their organization scope.
-9. When calculating "three consecutive days winner not allowed" rule, system will assume working days are Monday till Friday (no custom holiday calendar check for now).
-10. Organization users can post todays vote, but only one vote per day (previous will be overwritten).
-11. Organization users can see list of all their previous votes (not only todays), and delete any of their votes, if they wish.
+9. When calculating "three consecutive days winner not allowed" rule, system will assume working days are Monday till Friday (no custom holiday calendar check for now).there
+10. If there are no votes, there is no winner menu that day.
+11. If there are equal amount of votes, winner menu will be the one, which had first vote that day
+12. Organization users can post todays vote, but only one vote per day (previous will be overwritten).
+13. Organization users can see list of all their previous votes (not only todays), and delete any of their votes, if they wish.
 
 ## Solution - API design
 

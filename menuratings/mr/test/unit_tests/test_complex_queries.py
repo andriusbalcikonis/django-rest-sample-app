@@ -59,6 +59,28 @@ tests = [
         ],
     },
     {
+        "scenario": "Equal votes, menu '0' wins, because first vote was for it",
+        "input_votes": [
+            {"day": TODAY_WEDNESDAY, "user": 0, "menu": 0},
+            {"day": TODAY_WEDNESDAY, "user": 1, "menu": 1},
+        ],
+        "expected_output_results": [
+            {"menu": 0, "total_votes": 1, "winner": True},
+            {"menu": 1, "total_votes": 1},
+        ],
+    },
+    {
+        "scenario": "Equal votes, menu '1' wins, because first vote was for it",
+        "input_votes": [
+            {"day": TODAY_WEDNESDAY, "user": 0, "menu": 1},
+            {"day": TODAY_WEDNESDAY, "user": 1, "menu": 0},
+        ],
+        "expected_output_results": [
+            {"menu": 1, "total_votes": 1, "winner": True},
+            {"menu": 0, "total_votes": 1},
+        ],
+    },
+    {
         "scenario": (
             "Menu '0' has most votes three workdays in a row, "
             "so third day menu '1' option is declared as winner"

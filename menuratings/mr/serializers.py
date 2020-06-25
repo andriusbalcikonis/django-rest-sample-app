@@ -135,7 +135,10 @@ class MyTodaysOptionsMenuSerializer(serializers.HyperlinkedModelSerializer):
     def get_is_todays_winner(self, current_menu_item):
         stats = self.get_and_cache_stats()
         for line in stats:
-            if line.get("menu__restaurant_id") == current_menu_item.restaurant_id:
+            if (
+                line.get("winner")
+                and line.get("menu__restaurant_id") == current_menu_item.restaurant_id
+            ):
                 return True
         return False
 

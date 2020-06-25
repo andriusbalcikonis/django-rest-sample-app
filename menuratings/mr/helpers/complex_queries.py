@@ -1,6 +1,6 @@
 from datetime import timedelta
 from itertools import groupby
-from django.db.models import Count
+from django.db.models import Count, Min
 from menuratings.mr.models import Vote
 
 
@@ -62,7 +62,7 @@ def _get_full_voting_stats_for_org(organization_id):
     # Group votes by restaurant and date, calculate vote count for each group:
     query = (
         query.values("menu__date", "menu__restaurant_id")
-        .annotate(total_votes=Count("menu__restaurant_id"))
+        .annotate(total_votes=Count("menu__restaurant_id"), lowest_vote_id=Min("id"))
         .order_by("menu__date")
     )
 
@@ -79,15 +79,16 @@ def _group_voting_stats_by_day(voting_stats_hisory):
     grouped = {}
     for date, group in groupby(voting_stats_hisory, take_menu_date):
 
+        days_stats = _sort_days_stats(group)
+
         days_stats = [
             {
                 "menu__restaurant_id": x["menu__restaurant_id"],
                 "total_votes": x["total_votes"],
             }
-            for x in group
+            for x in days_stats
         ]
 
-        days_stats = _sort_days_stats(days_stats)
         grouped[_get_date_key(date)] = days_stats
 
     return grouped
@@ -97,7 +98,13 @@ def _sort_days_stats(days_stats):
     def take_total_votes(item):
         return item["total_votes"]
 
-    return sorted(days_stats, reverse=True, key=take_total_votes)
+    def take_lowest_vote_id(item):
+        return item["lowest_vote_id"]
+
+    days_stats = sorted(days_stats, reverse=False, key=take_lowest_vote_id)
+    days_stats = sorted(days_stats, reverse=True, key=take_total_votes)
+
+    return days_stats
 
 
 def _date_is_workday(date):
