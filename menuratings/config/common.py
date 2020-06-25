@@ -3,6 +3,7 @@ from os.path import join
 from distutils.util import strtobool
 from configurations import Configuration
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -28,12 +29,13 @@ class Common(Configuration):
         "django.middleware.security.SecurityMiddleware",
         "django.contrib.sessions.middleware.SessionMiddleware",
         "django.middleware.common.CommonMiddleware",
-        "django_graylog.GraylogMiddleware",
         "django.middleware.csrf.CsrfViewMiddleware",
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
         "simple_history.middleware.HistoryRequestMiddleware",
+        "django_graylog.GraylogMiddleware",
+        "menuratings.mr.middleware.additional_logging_middleware.additional_logging_middleware",
     )
 
     ALLOWED_HOSTS = ["*"]
