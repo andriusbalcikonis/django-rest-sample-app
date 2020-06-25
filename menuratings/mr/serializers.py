@@ -7,6 +7,7 @@ from menuratings.mr.models import (
     User,
 )
 from menuratings.mr.helpers.external_dependencies import get_todays_date
+from menuratings.mr.helpers.complex_queries import get_voting_results_of_the_day
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -132,7 +133,26 @@ class MyTodaysOptionsMenuSerializer(serializers.HyperlinkedModelSerializer):
     is_todays_winner = serializers.SerializerMethodField("get_is_todays_winner")
 
     def get_is_todays_winner(self, current_menu_item):
-        return True
+        stats = self.get_and_cache_stats()
+        for line in stats:
+            if line.get("menu__restaurant_id") == current_menu_item.restaurant_id:
+                return True
+        return False
+
+    def get_and_cache_stats(self):
+
+        request = self.context.get("request")
+        cached_stats = request.mr_stats if hasattr(request, "mr_stats") else None
+
+        if not cached_stats:
+            today = get_todays_date()
+            user = self.get_context_user()
+            cached_stats = get_voting_results_of_the_day(
+                today, user.represented_organization_id
+            )
+            request.mr_stats = cached_stats
+
+        return cached_stats
 
     def get_context_user(self):
         request = self.context.get("request")
@@ -143,7 +163,12 @@ class MyTodaysOptionsMenuSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Menu
-        fields = ["restaurant", "contents", "votes_in_my_organization"]
+        fields = [
+            "restaurant",
+            "contents",
+            "votes_in_my_organization",
+            "is_todays_winner",
+        ]
 
 
 class MyVoteSerializer(serializers.HyperlinkedModelSerializer):
