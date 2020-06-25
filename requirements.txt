@@ -7,6 +7,9 @@ djangorestframework==3.11.0
 dj-database-url==0.5.0
 psycopg2-binary==2.8.5
 
+# Minio file server
+django-minio==2.0
+
 # Linters & formatters
 flake8==3.8.3
 black==19.10b0
