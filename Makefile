@@ -42,10 +42,10 @@ test: check
 ensure-local-db: $(ENV)/.pip-install-done
 
 	# Ensure local db is started:
-	docker-compose -f ./docker/local_dbs/docker-compose.yml up -d
+	docker-compose -f ./docker/docker-compose.yml up -d
 
 	# Wait till it's ready
-	$(PYBIN)/python3 docker/local_dbs/wait.py
+	$(PYBIN)/python3 docker/wait.py
 	
 	# Run migrations
 	$(PYBIN)/python3 manage.py migrate
@@ -66,8 +66,8 @@ makemigrations: $(ENV)/.pip-install-done
 cleanup-local-db:
 
 	# Stop, remove and restart local db:
-	docker-compose -f ./docker/local_dbs/docker-compose.yml stop
-	docker-compose -f ./docker/local_dbs/docker-compose.yml rm
+	docker-compose -f ./docker/docker-compose.yml stop
+	docker-compose -f ./docker/docker-compose.yml rm
 
 	# Start again:
 	make ensure-local-db
