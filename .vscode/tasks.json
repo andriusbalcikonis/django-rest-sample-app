@@ -7,6 +7,12 @@
       "label": "make",
       "command": "make",
       "type": "shell"
+    },
+    {
+      "label": "make_check",
+      "command": "make",
+      "args": ["check"],
+      "type": "shell"
     }
   ]
 }

@@ -26,7 +26,7 @@ tests = [
     {
         "scenario": "One vote today - OK, can be seen in results",
         "input_votes": [{"day": 4, "user": 0, "menu": 0}],
-        "expected_output_results": [{"menu": 0, "total_votes": 1}],
+        "expected_output_results": [{"menu": 0, "total_votes": 1, "winner": True}],
     },
     {
         "scenario": "One vote today, but by user from other org - empty results",
@@ -44,7 +44,7 @@ tests = [
             {"day": 4, "user": 5, "menu": 2},
         ],
         "expected_output_results": [
-            {"menu": 1, "total_votes": 3},
+            {"menu": 1, "total_votes": 3, "winner": True},
             {"menu": 2, "total_votes": 2},
             {"menu": 0, "total_votes": 1},
         ],
@@ -149,5 +149,7 @@ def transform_expected_output_results(expected_output_results, days_and_menus):
             "menu__restaurant_id": menu.restaurant.id,
             "total_votes": line["total_votes"],
         }
+        if line.get("winner"):
+            transformed_line["winner"] = line.get("winner")
         transformed.append(transformed_line)
     return transformed

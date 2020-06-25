@@ -30,7 +30,7 @@
       "program": "${workspaceFolder}/env/bin/pytest",
       "args": [],
       "django": true,
-      "preLaunchTask": "make",
+      "preLaunchTask": "make_check",
       "justMyCode": false
     }
   ]
