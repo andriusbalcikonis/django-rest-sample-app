@@ -15,7 +15,7 @@ def get_voting_results_of_the_day(date, organization_id):
 
     # Group votes by menu, take vote count and order by it:
     query = (
-        query.values("menu_id")
+        query.values("menu__restaurant_id")
         .annotate(total_votes=Count("menu"))
         .order_by("-total_votes")
     )

@@ -145,6 +145,9 @@ def transform_expected_output_results(expected_output_results, days_and_menus):
     transformed = []
     for line in expected_output_results:
         menu = days_and_menus[CURRENT_DAY_INDEX]["day_menus"][line["menu"]]
-        transformed_line = {"menu_id": menu.id, "total_votes": line["total_votes"]}
+        transformed_line = {
+            "menu__restaurant_id": menu.restaurant.id,
+            "total_votes": line["total_votes"],
+        }
         transformed.append(transformed_line)
     return transformed
