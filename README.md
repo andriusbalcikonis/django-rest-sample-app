@@ -13,7 +13,8 @@ This is a simple django rest app, which I built as an excersize.
 
 **To run application:**
 
-TODO
+1. `docker-compose up`
+2. Open http://localhost:8010
 
 ## Excercize requirements
 
