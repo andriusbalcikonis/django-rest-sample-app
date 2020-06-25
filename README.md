@@ -1,14 +1,54 @@
 # Django REST sample app
 
-## Intro
+## Overview
 
 This is a simple django rest app, which I built as an excersize.
 
-## Requirements
+## Quickstart
+
+**Prerequisites:**
+
+- Docker
+- Docker compose
+
+**To run application:**
 
 TODO
 
-## Solution - Functionality design
+## Excercize requirements
+
+**About**
+
+Restaurant task
+
+Company needs internal service for its’ employees which helps them to make a decision on lunch place.
+Each restaurant will be uploading menus using the system every day over API and employees will vote for menu before leaving for lunch.
+The solution can be presented in Docker environment, which will add additional Karma points.
+
+**Requirements for implementation**
+
+1. There should be an API for:
+
+- Authentication
+- Creating restaurant
+- Uploading menu for restaurant (There should be a menu for each day)
+- Creating employee
+- Getting current day menu
+- Voting for restaurant menu
+- Getting results for current day. The winner restaurant should not be the winner for
+- 3 consecutive working days
+- Logout
+
+2. Reasonable amount of automated tests
+3. Solution should be uploaded to version control
+4. Solution should be built using: Django and Python3, Django Rest Framework, SQL database of your choice (PostgreSQL, SQLite, MySQL, etc)
+5. Sufficient logging must be implemented
+6. PEP8 rules must be followed. Additional linters are welcomed (PyLint, etc)
+7. Project README.md must be created with launch instructions
+
+## Solution
+
+**Functionality design**
 
 In real world, this would be clarified with PO or clients. This is an excersize, so I just made following assumptons:
 
@@ -26,7 +66,7 @@ In real world, this would be clarified with PO or clients. This is an excersize,
 12. Organization users can post todays vote, but only one vote per day (previous will be overwritten).
 13. Organization users can see list of all their previous votes (not only todays), and delete any of their votes, if they wish.
 
-## Solution - API design
+**API design**
 
 | Endpoint                       | HTTP method | Action                                                           | Allowed for users              |
 | :----------------------------- | :---------- | :--------------------------------------------------------------- | :----------------------------- |
@@ -65,7 +105,11 @@ In real world, this would be clarified with PO or clients. This is an excersize,
 | admin-menus/[id]               | DELETE      | Delete menu                                                      | Admin                          |
 | admin-votes                    | GET         | Lists all votes                                                  | Admin                          |
 
-## Local Development - quick start
+**Best practices used**
+
+TODO
+
+## Development instructions
 
 **Prerequisites:**
 
@@ -74,6 +118,10 @@ In real world, this would be clarified with PO or clients. This is an excersize,
 - Python3 (tested with 3.8.2, possibly works with older versions as well)
 - Virtualenv
 - Make
+
+**To create superadmin user:**
+
+1. `make createsuperuser`
 
 **To start application locally:**
 
@@ -88,7 +136,17 @@ Clarification: `make run` (or any `make` command) will ensure a few things autom
 4. Apply migrations
 5. Run tests
 
-## Local development - other commands
+**To start debugging:**
+
+Configure and start debugging for your IDE. Details:
+
+- Command before startup: `make`
+- Startup command: `env/bin/python manage.py runserver`
+- Example configuration for Visual Studio Code is here: `.vscode/launch.json`
+
+**To run checks (linting, formatting) and tests:**
+
+1. `make test`
 
 **To check DB contents via pgadmin**
 
@@ -109,19 +167,3 @@ Clarification: `make run` (or any `make` command) will ensure a few things autom
 3. Login with `admin:admin`
 4. (First time only) configure new input (GELF UDP on port 12201) here: http://localhost:8003/system/inputs
 5. See messages in "All messages" stream here: http://localhost:8003/streams
-
-**To run checks (linting, formatting) and tests:**
-
-1. `make test`
-
-**To create superadmin user:**
-
-1. `make createsuperuser`
-
-**To start debugging:**
-
-Configure and start debugging for your IDE. Details:
-
-- Command before startup: `make`
-- Startup command: `env/bin/python manage.py runserver`
-- Example configuration for Visual Studio Code is here: `.vscode/launch.json`
