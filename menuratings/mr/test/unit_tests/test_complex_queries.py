@@ -1,15 +1,22 @@
 import pytest
-from datetime import datetime
+from datetime import datetime, timedelta
 from menuratings.mr.models import User, Restaurant, Organization, Menu, Vote
 from menuratings.mr.helpers.complex_queries import get_voting_results_of_the_day
 
 # Unit tests of complex query "get_voting_results_of_the_day" logic
 
-NUM_OF_DAYS = 5
+NUM_OF_DAYS = 7
 NUM_OF_RESTAURANTS = 3
 NUM_OF_USERS = 10
 
-CURRENT_DAY_INDEX = NUM_OF_DAYS - 1
+# Today will be Wednesday in these tests (see "generate_day" function)
+TODAY_WEDNESDAY = 0
+YESTERDAY_TUESDAY = 1
+MONDAY = 2
+SUNDAY = 3
+SATURDAY = 4
+FRIDAY = 5
+THURSDAY = 6
 
 
 tests = [
@@ -20,33 +27,120 @@ tests = [
     },
     {
         "scenario": "One vote yesterday - still empty results today",
-        "input_votes": [{"day": 3, "user": 0, "menu": 0}],
+        "input_votes": [{"day": YESTERDAY_TUESDAY, "user": 0, "menu": 0}],
         "expected_output_results": [],
     },
     {
         "scenario": "One vote today - OK, can be seen in results",
-        "input_votes": [{"day": 4, "user": 0, "menu": 0}],
+        "input_votes": [{"day": TODAY_WEDNESDAY, "user": 0, "menu": 0}],
         "expected_output_results": [{"menu": 0, "total_votes": 1, "winner": True}],
     },
     {
         "scenario": "One vote today, but by user from other org - empty results",
-        "input_votes": [{"day": 4, "other_org": True, "user": 0, "menu": 0}],
+        "input_votes": [
+            {"day": TODAY_WEDNESDAY, "other_org": True, "user": 0, "menu": 0}
+        ],
         "expected_output_results": [],
     },
     {
         "scenario": "Menu '1' wins with 3 votes",
         "input_votes": [
-            {"day": 4, "user": 0, "menu": 0},
-            {"day": 4, "user": 1, "menu": 1},
-            {"day": 4, "user": 2, "menu": 1},
-            {"day": 4, "user": 3, "menu": 1},
-            {"day": 4, "user": 4, "menu": 2},
-            {"day": 4, "user": 5, "menu": 2},
+            {"day": TODAY_WEDNESDAY, "user": 0, "menu": 0},
+            {"day": TODAY_WEDNESDAY, "user": 1, "menu": 1},
+            {"day": TODAY_WEDNESDAY, "user": 2, "menu": 1},
+            {"day": TODAY_WEDNESDAY, "user": 3, "menu": 1},
+            {"day": TODAY_WEDNESDAY, "user": 4, "menu": 2},
+            {"day": TODAY_WEDNESDAY, "user": 5, "menu": 2},
         ],
         "expected_output_results": [
             {"menu": 1, "total_votes": 3, "winner": True},
             {"menu": 2, "total_votes": 2},
             {"menu": 0, "total_votes": 1},
+        ],
+    },
+    {
+        "scenario": (
+            "Menu '0' has most votes three workdays in a row, "
+            "so third day menu '1' option is declared as winner"
+        ),
+        "input_votes": [
+            {"day": MONDAY, "user": 0, "menu": 0},
+            {"day": MONDAY, "user": 1, "menu": 0},
+            {"day": YESTERDAY_TUESDAY, "user": 0, "menu": 0},
+            {"day": YESTERDAY_TUESDAY, "user": 1, "menu": 0},
+            {"day": TODAY_WEDNESDAY, "user": 0, "menu": 0},
+            {"day": TODAY_WEDNESDAY, "user": 1, "menu": 0},
+            {"day": TODAY_WEDNESDAY, "user": 2, "menu": 1},
+        ],
+        "expected_output_results": [
+            {"menu": 0, "total_votes": 2},
+            {"menu": 1, "total_votes": 1, "winner": True},
+        ],
+    },
+    {
+        "scenario": (
+            "Menu '0' has most votes four workdays in a row, ",
+            "so yesterday it was skipped, today it can be the winner again",
+        ),
+        "input_votes": [
+            {"day": FRIDAY, "user": 0, "menu": 0},
+            {"day": FRIDAY, "user": 1, "menu": 0},
+            {"day": MONDAY, "user": 0, "menu": 0},
+            {"day": MONDAY, "user": 1, "menu": 0},
+            {"day": YESTERDAY_TUESDAY, "user": 0, "menu": 0},
+            {"day": YESTERDAY_TUESDAY, "user": 1, "menu": 0},
+            {"day": TODAY_WEDNESDAY, "user": 0, "menu": 0},
+            {"day": TODAY_WEDNESDAY, "user": 1, "menu": 0},
+            {"day": TODAY_WEDNESDAY, "user": 2, "menu": 1},
+        ],
+        "expected_output_results": [
+            {"menu": 0, "total_votes": 2, "winner": True},
+            {"menu": 1, "total_votes": 1},
+        ],
+    },
+    {
+        "scenario": (
+            "Menu '0' has most votes four days in a row, ",
+            "but if we count workdays - three, ",
+            "so today it needs to be skipped",
+        ),
+        "input_votes": [
+            {"day": SUNDAY, "user": 0, "menu": 0},
+            {"day": SUNDAY, "user": 1, "menu": 0},
+            {"day": MONDAY, "user": 0, "menu": 0},
+            {"day": MONDAY, "user": 1, "menu": 0},
+            {"day": YESTERDAY_TUESDAY, "user": 0, "menu": 0},
+            {"day": YESTERDAY_TUESDAY, "user": 1, "menu": 0},
+            {"day": TODAY_WEDNESDAY, "user": 0, "menu": 0},
+            {"day": TODAY_WEDNESDAY, "user": 1, "menu": 0},
+            {"day": TODAY_WEDNESDAY, "user": 2, "menu": 1},
+        ],
+        "expected_output_results": [
+            {"menu": 0, "total_votes": 2},
+            {"menu": 1, "total_votes": 1, "winner": True},
+        ],
+    },
+    {
+        "scenario": (
+            "On Monday there was a 3 workday streak for menu '1',",
+            "so menu '0' was declared winner, ",
+            "this means, that '0' has a streak today",
+            "and cannot be declared winner today",
+        ),
+        "input_votes": [
+            {"day": THURSDAY, "user": 0, "menu": 1},
+            {"day": FRIDAY, "user": 0, "menu": 1},
+            {"day": MONDAY, "user": 0, "menu": 0},
+            {"day": MONDAY, "user": 1, "menu": 1},
+            {"day": MONDAY, "user": 2, "menu": 1},
+            {"day": YESTERDAY_TUESDAY, "user": 0, "menu": 0},
+            {"day": TODAY_WEDNESDAY, "user": 0, "menu": 0},
+            {"day": TODAY_WEDNESDAY, "user": 1, "menu": 0},
+            {"day": TODAY_WEDNESDAY, "user": 2, "menu": 1},
+        ],
+        "expected_output_results": [
+            {"menu": 0, "total_votes": 2},
+            {"menu": 1, "total_votes": 1, "winner": True},
         ],
     },
 ]
@@ -74,7 +168,7 @@ def test_get_voting_results_of_the_day(test_data, db):
         vote.save()
 
     # Step 3. Pick current day:
-    current_day = days_and_menus[CURRENT_DAY_INDEX]["day"]
+    current_day = days_and_menus[TODAY_WEDNESDAY]["day"]
 
     # Step 4. Execute the target function:
     results = get_voting_results_of_the_day(current_day, org.id)
@@ -103,7 +197,7 @@ def prepare_restaurants():
 def prepare_days_and_menus(restaurants):
     days_and_menus = []
     for day_index in range(NUM_OF_DAYS):
-        day = datetime(2020, 1, 1 + day_index)
+        day = generate_day(day_index)
 
         day_menus = []
         for restaurant_index in range(NUM_OF_RESTAURANTS):
@@ -144,7 +238,7 @@ def prepare_users(org, other_org):
 def transform_expected_output_results(expected_output_results, days_and_menus):
     transformed = []
     for line in expected_output_results:
-        menu = days_and_menus[CURRENT_DAY_INDEX]["day_menus"][line["menu"]]
+        menu = days_and_menus[TODAY_WEDNESDAY]["day_menus"][line["menu"]]
         transformed_line = {
             "menu__restaurant_id": menu.restaurant.id,
             "total_votes": line["total_votes"],
@@ -153,3 +247,8 @@ def transform_expected_output_results(expected_output_results, days_and_menus):
             transformed_line["winner"] = line.get("winner")
         transformed.append(transformed_line)
     return transformed
+
+
+def generate_day(day_index):
+    # Taking 2020-01-01 (it was wednesday) as TODAY_WEDNESDAY
+    return datetime(2020, 1, 1) - timedelta(days=day_index)

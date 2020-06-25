@@ -159,7 +159,7 @@ def _get_winner_of_workday_recursively(
 
     workday_before = _get_previous_workday(today)
     workday_before_winner = _get_winner_of_workday_recursively(
-        voting_stats_history_by_day, workday_before
+        voting_stats_history_by_day, winners_cache, workday_before
     )
 
     if first_place_today != workday_before_winner:
@@ -170,7 +170,7 @@ def _get_winner_of_workday_recursively(
         # Need to check two workdays before:
         workday_before2 = _get_previous_workday(workday_before)
         workday_before2_winner = _get_winner_of_workday_recursively(
-            voting_stats_history_by_day, workday_before2
+            voting_stats_history_by_day, winners_cache, workday_before2
         )
 
         # Check the winner to avoid three workday streak:
