@@ -22,3 +22,5 @@ class Local(Common):
     MINIO_BUCKET = "menuratingsbucket"
     MINIO_SECURE = False
     DEFAULT_FILE_STORAGE = "django_minio.storage.MinioStorage"
+
+    GRAYLOG_ENDPOINT = "udp://localhost:12201"

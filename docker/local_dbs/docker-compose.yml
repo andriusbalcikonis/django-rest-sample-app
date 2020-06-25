@@ -1,6 +1,7 @@
 version: "2"
 
 services:
+  # Relational database is PostgreSQL and it's admin tool is pgadmin
   postgres:
     image: postgres:11.6
     ports:
@@ -20,6 +21,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: "password"
       PGADMIN_LISTEN_PORT: 5050
       PGADMIN_LISTEN_ADDRESS: 0.0.0.0
+
+  # Files are kept in Minio service:
   minio:
     image: minio/minio
     ports:
@@ -28,3 +31,34 @@ services:
     environment:
       MINIO_ACCESS_KEY: "minio_admin"
       MINIO_SECRET_KEY: "minio_password"
+
+  # Logging is aggregated with Graylog+Elasticsearch+MongoDB solution:
+  mongo:
+    image: mongo:3
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.5
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+  graylog:
+    image: graylog/graylog:3.3
+    environment:
+      # CHANGE ME (must be at least 16 characters)!
+      - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
+      # Password: admin
+      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://localhost:8003/
+    depends_on:
+      - mongo
+      - elasticsearch
+    ports:
+      # Graylog web interface and REST API
+      - 8003:9000
+      # GELF UDP, which will be called by django-graylog middleware
+      - 12201:12201/udp

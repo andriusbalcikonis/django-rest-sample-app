@@ -65,7 +65,7 @@ In real world, this would be clarified with PO or clients. This is an excersize,
 | admin-menus/[id]               | DELETE      | Delete menu                                                      | Admin                          |
 | admin-votes                    | GET         | Lists all votes                                                  | Admin                          |
 
-## Local Development
+## Local Development - quick start
 
 **Prerequisites:**
 
@@ -84,17 +84,11 @@ Clarification: `make run` (or any `make` command) will ensure a few things autom
 
 1. Install dependencies (virtualenv, pip install)
 2. Perform checks (formatting, linting)
-3. Startup local DBs
+3. Startup local DBs, file service, logging service
 4. Apply migrations
 5. Run tests
 
-**To run checks (linting, formatting) and tests:**
-
-1. `make test`
-
-**To create superadmin user:**
-
-1. `make createsuperuser`
+## Local development - other commands
 
 **To check DB contents via pgadmin**
 
@@ -107,6 +101,22 @@ Clarification: `make run` (or any `make` command) will ensure a few things autom
 1. `make`
 2. Open http://localhost:8002
 3. Login with `minio_admin:minio_password`
+
+**To check logs in Graylog**
+
+1. `make`
+2. Open http://localhost:8003
+3. Login with `admin:admin`
+4. (First time only) configure new input (GELF UDP on port 12201) here: http://localhost:8003/system/inputs
+5. See messages in "All messages" stream here: http://localhost:8003/streams
+
+**To run checks (linting, formatting) and tests:**
+
+1. `make test`
+
+**To create superadmin user:**
+
+1. `make createsuperuser`
 
 **To start debugging:**
 
