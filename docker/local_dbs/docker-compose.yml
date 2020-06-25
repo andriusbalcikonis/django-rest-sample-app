@@ -23,5 +23,8 @@ services:
   minio:
     image: minio/minio
     ports:
-      - "9000:9000"
+      - "8002:9000"
     command: "server /data"
+    environment:
+      MINIO_ACCESS_KEY: "minio_admin"
+      MINIO_SECRET_KEY: "minio_password"

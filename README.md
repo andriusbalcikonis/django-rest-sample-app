@@ -102,6 +102,12 @@ Clarification: `make run` (or any `make` command) will ensure a few things autom
 2. Open http://localhost:8001
 3. Login with `admin:password` and connect to Main db (password: `postgres`)
 
+**To check uploaded files via Minio browser**
+
+1. `make`
+2. Open http://localhost:8002
+3. Login with `minio_admin:minio_password`
+
 **To start debugging:**
 
 Configure and start debugging for your IDE. Details:

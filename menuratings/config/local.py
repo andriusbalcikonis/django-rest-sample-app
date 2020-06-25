@@ -16,9 +16,9 @@ class Local(Common):
         )
     }
 
-    MINIO_SERVER = "localhost"
-    MINIO_ACCESSKEY = "Q3AM3UQ867SPQQA43P2F"
-    MINIO_SECRET = "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG"
-    MINIO_BUCKET = "menuratings_bucket"
-    MINIO_SECURE = True
+    MINIO_SERVER = "localhost:8002"
+    MINIO_ACCESSKEY = "minio_admin"
+    MINIO_SECRET = "minio_password"
+    MINIO_BUCKET = "menuratingsbucket"
+    MINIO_SECURE = False
     DEFAULT_FILE_STORAGE = "django_minio.storage.MinioStorage"

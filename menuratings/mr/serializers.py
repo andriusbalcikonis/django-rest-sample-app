@@ -86,7 +86,7 @@ class RestaurantSerializer(serializers.HyperlinkedModelSerializer):
 class MenuSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Menu
-        fields = ["url", "id", "date", "contents", "restaurant"]
+        fields = ["url", "id", "date", "contents", "restaurant", "file"]
 
 
 class MyRestaurantTodaysMenuSerializer(serializers.HyperlinkedModelSerializer):
@@ -97,7 +97,7 @@ class MyRestaurantTodaysMenuSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Menu
-        fields = ["url", "contents"]
+        fields = ["url", "contents", "file"]
 
 
 class MyTodaysOptionsMenuSerializer(serializers.HyperlinkedModelSerializer):
@@ -169,6 +169,7 @@ class MyTodaysOptionsMenuSerializer(serializers.HyperlinkedModelSerializer):
         fields = [
             "restaurant",
             "contents",
+            "file",
             "votes_in_my_organization",
             "is_todays_winner",
         ]

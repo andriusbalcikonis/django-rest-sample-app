@@ -17,6 +17,7 @@ class Restaurant(models.Model):
 class Menu(models.Model):
     date = models.DateField()
     contents = models.TextField()
+    file = models.FileField(blank=True, null=True, upload_to="menu_file_uplods")
 
     restaurant = models.ForeignKey(
         Restaurant, related_name="posted_menus", on_delete=models.CASCADE
