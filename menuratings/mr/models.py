@@ -5,10 +5,12 @@ from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
+from simple_history.models import HistoricalRecords
 
 
 class Restaurant(models.Model):
     name = models.TextField()
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
@@ -18,10 +20,10 @@ class Menu(models.Model):
     date = models.DateField()
     contents = models.TextField()
     file = models.FileField(blank=True, null=True, upload_to="menu_file_uplods")
-
     restaurant = models.ForeignKey(
         Restaurant, related_name="posted_menus", on_delete=models.CASCADE
     )
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
@@ -36,6 +38,7 @@ class Menu(models.Model):
 
 class Organization(models.Model):
     name = models.TextField()
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
@@ -60,6 +63,8 @@ class User(AbstractUser):
         null=True,
     )
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return self.username
 
@@ -73,3 +78,4 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 class Vote(models.Model):
     voter = models.ForeignKey(User, related_name="votes", on_delete=models.CASCADE)
     menu = models.ForeignKey(Menu, related_name="votes", on_delete=models.CASCADE)
+    history = HistoricalRecords()

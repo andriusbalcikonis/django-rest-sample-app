@@ -20,6 +20,7 @@ class Common(Configuration):
         "rest_framework.authtoken",  # token authentication
         # Your apps
         "menuratings.mr",
+        "simple_history",
     )
 
     # https://docs.djangoproject.com/en/2.0/topics/http/middleware/
@@ -32,6 +33,7 @@ class Common(Configuration):
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
+        "simple_history.middleware.HistoryRequestMiddleware",
     )
 
     ALLOWED_HOSTS = ["*"]

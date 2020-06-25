@@ -59,7 +59,7 @@ createsuperuser: default-setup
 	$(PYBIN)/python3 manage.py createsuperuser
 
 .PHONY: makemigrations
-makemigrations: default-setup
+makemigrations: $(ENV)/.pip-install-done
 	$(PYBIN)/python3 manage.py makemigrations
 
 .PHONY: cleanup-local-db
