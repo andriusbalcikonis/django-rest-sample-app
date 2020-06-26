@@ -106,9 +106,46 @@ In real world, this would be clarified with PO or clients. This is an excersize,
 | admin-menus/[id]               | DELETE      | Delete menu                                                      | Admin                          |
 | admin-votes                    | GET         | Lists all votes                                                  | Admin                          |
 
-**Best practices used**
+## Tools and best practices used
 
-TODO
+**Clean code**
+
+- Python code is formatted with `black` and checked with `flake8`
+- No `flake8` rules are ignored, except `max-line-length` is set higher than default
+- Python code complexity limit is enforced with `flake8` setting `max-complexity`
+
+**Automated tests**
+
+- Functionality is tested with `pytest`
+- Test coverage is measured with `pytest-cov`
+- Test coverage is enforced with `pytest-cov` setting `fail_under`
+- Complex queries are extensively tested with different scenarios the help of `pytest.mark.parametrize`
+
+**Development setup (backend developer experience)**
+
+- One-line command to install, launch services and run application locally with `make run`
+- Isolated python environment with `virtualenv`
+- Simple installation of database, file server and logging service with `docker-compose`
+- Database, file server and logging service all have UI admin consoles running locally
+- Automated service startup, checks, tests and migrations checkup are done automatically before any `make` command
+- Ability to run app in demo mode with minimal dependencies and no additional services with `docker-compose`
+- In-line debugging setup for application run and test run for VSC IDE
+- Automated `black` formatting setup on file save for VSC IDE
+
+**API user experience (frontend developer experience)**
+
+- All resources are designed as lists, even when it will always contain no more than one item. This is to keep API consistent and predictable.
+- Hyperlinked serialization and other features of `django-rest-framework` was used for API to be easily discoverable and manually testable even without frontend app
+
+**Logging**
+
+- Logs are aggregated to `Graylog`, which stores them in structured format and allows queries (has `ElasticSearch` and `MongoDB` behind it)
+- All requests has additional info logged about logged in user in custom `Django middleware`. Can be extended with more info.
+- Full audit of data changes in "historical data" tables with `django-simple-history` package
+
+**File management**
+
+- To not restrict app scalability and keep it stateless, files are managed in separate Amazon S3 compatible service `Minio`
 
 ## Development instructions
 
