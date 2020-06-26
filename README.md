@@ -112,13 +112,13 @@ In real world, this would be clarified with PO or clients. This is an excersize,
 
 - Python code is formatted with `black` and checked with `flake8`
 - No `flake8` rules are ignored, except `max-line-length` is set higher than default
-- Python code complexity limit is enforced with `flake8` setting `max-complexity`
+- Python code complexity limit is enforced with `flake8` setting `max-complexity`. Currently 5 (see `setup.cfg`).
 
 **Automated tests**
 
 - Functionality is tested with `pytest`
 - Test coverage is measured with `pytest-cov`
-- Test coverage is enforced with `pytest-cov` setting `fail_under`
+- Test coverage is enforced with `pytest-cov` setting `fail_under`. Currently 80% (see `setup.cfg`).
 - Complex queries are extensively tested with different scenarios the help of `pytest.mark.parametrize`
 
 **Development setup (backend developer experience)**
@@ -173,6 +173,23 @@ Clarification: `make run` (or any `make` command) will ensure a few things autom
 3. Startup local DBs, file service, logging service
 4. Apply migrations
 5. Run tests
+
+**To do some testing locally:**
+
+1. Start and open http://localhost:8000
+2. Create a few users while posting "registration form" to http://localhost:8000/api/v1/my-user/
+3. Login as admin
+4. Create a few restaurants while posting here: http://localhost:8000/api/v1/admin-restaurants/
+5. Create a few orgs while posting here: http://localhost:8000/api/v1/admin-organizations/
+6. Update a few users to let them represent a restaurant and/or org here: http://localhost:8000/api/v1/admin-users/
+7. Logout
+8. Login as one of restaurant representing users
+9. Upload todays menu here: http://localhost:8000/api/v1/my-restaurant-todays-menu/
+10. Do the steps 8&9 for other restaurant user
+11. Login as org representing user
+12. See my todays voting options and todays stats: http://localhost:8000/api/v1/my-todays-options/
+13. Post vote: http://localhost:8000/api/v1/my-votes/
+14. See updated stats http://localhost:8000/api/v1/my-todays-options/, notice which restaurant is marked as winner
 
 **To start debugging:**
 
