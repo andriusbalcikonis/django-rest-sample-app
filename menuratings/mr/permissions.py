@@ -67,14 +67,17 @@ class CanWorkWithMyRestaurantMenu(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, menu_item):
-        if menu_item.restaurant_id == request.user.represented_restaurant_id:
+        if (
+            not request.user.is_anonymous
+            and menu_item.restaurant_id == request.user.represented_restaurant_id
+        ):
             return menu_item.date == get_todays_date()
         else:
             return False
 
     def has_permission(self, request, view):
 
-        user_is_representing_any_restaurant = bool(
+        user_is_representing_any_restaurant = not request.user.is_anonymous and bool(
             request.user.represented_restaurant_id
         )
 

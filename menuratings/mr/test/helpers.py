@@ -1,6 +1,6 @@
 from django.urls import reverse
 from rest_framework import status
-from menuratings.mr.models import User
+from menuratings.mr.models import User, Restaurant
 
 # Constants:
 
@@ -31,12 +31,34 @@ def set_initial_conditions_only_admin_user():
     User.objects.create_superuser(ADMIN_USER_USERNAME, "admin@admin.com", ANY_USER_PWD)
 
 
+def set_initial_conditions_one_restaurant_and_its_user(
+    client, restaurant_name, username
+):
+
+    restaurant = Restaurant(name=restaurant_name)
+    restaurant.save()
+
+    do_create_user_and_login(client, username)
+
+    user = User.objects.filter(username=username)[0]
+    user.represented_restaurant = restaurant
+    user.save()
+
+
 # Assertions
+
+
+def assert_created_ok(response):
+    assert response.status_code == status.HTTP_201_CREATED
 
 
 def assert_result_count(response, count):
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data["results"]) == count
+
+
+def assert_not_accessible(response):
+    assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 # Selectors:
