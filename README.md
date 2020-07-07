@@ -129,6 +129,7 @@ In real world, this would be clarified with PO or clients. This is an excersize,
 - Database, file server and logging service all have UI admin consoles running locally
 - Automated service startup, checks, tests and migrations checkup are done automatically before any `make` command
 - Ability to run app in demo mode with minimal dependencies and no additional services with `docker-compose`
+- `pip-tools` are used to get the best of both worlds - pinned versions in requirements.txt and easy upgrade when needed
 - In-line debugging setup for application run and test run for VSC IDE
 - Automated `black` formatting setup on file save for VSC IDE
 
@@ -222,3 +223,7 @@ Configure and start debugging for your IDE. Details:
 3. Login with `admin:admin`
 4. (First time only) configure new input (GELF UDP on port 12201) here: http://localhost:8003/system/inputs
 5. See messages in "All messages" stream here: http://localhost:8003/streams
+
+**To upgrade used libraries:**
+
+1. `make upgrade-requirements`

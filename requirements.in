@@ -1,0 +1,27 @@
+# Django
+Django
+django-configurations
+djangorestframework
+
+# PostgreSQL
+dj-database-url
+psycopg2-binary
+
+# Minio file server
+django-minio
+
+# Logging middleware for graylog
+django-graylog
+
+# Full audit:
+django-simple-history
+
+# Linters & formatters
+flake8
+black
+
+# Testing
+pytest
+pytest-cov
+pytest-django
+
